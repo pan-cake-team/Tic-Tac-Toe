@@ -1,4 +1,4 @@
-package com.cupcake.tictactoe
+package com.pancake.tictactoe
 
 import org.junit.Test
 

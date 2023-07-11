@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace 'com.cupcake.tictactoe'
+    namespace 'com.pancake.tictactoe'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.cupcake.tictactoe"
+        applicationId "com.pancake.tictactoe"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
