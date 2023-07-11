@@ -62,7 +62,9 @@ fun TicTacToeTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = mainTypography,
         content = content
     )
 }
+
+
