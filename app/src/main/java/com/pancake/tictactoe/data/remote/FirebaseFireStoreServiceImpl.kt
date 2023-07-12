@@ -79,7 +79,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     private companion object {
         const val ROOT_COLLECTION_PATH = "Session"
-        const val JOIN_PLAYER_PATH = "player"
+        const val JOIN_PLAYER_PATH = "players"
         const val SESSION_NOT_FOUND = "Session Not Found!"
         const val SESSION_JOINING_FAILED = "Session Joining failed!"
         const val SESSION_CREATION_FAILED = "Session creation failed!"
