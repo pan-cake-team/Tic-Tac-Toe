@@ -23,5 +23,6 @@ val text38 = Color(0x61000000)
 //shapes Color
 val Green = Color(0xFF4C9077)
 val Orange = Color(0xFFFB9E20)
+val Gray = Color(0xFFBABABA)
 
 
