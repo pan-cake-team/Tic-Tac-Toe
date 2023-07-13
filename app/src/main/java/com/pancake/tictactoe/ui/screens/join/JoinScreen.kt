@@ -41,8 +41,8 @@ fun JoinScreen(
         state = state,
         onCreateGameClicked = viewModel::showCreateGameDialog,
         onJoinGameClicked = viewModel::showJoinGameDialog,
-        onCreateSession = {},
-        onJoinToSession = {}
+        onCreateSession = {name ->},
+        onJoinToSession = {name, gameId ->}
     )
 }
 
@@ -51,8 +51,8 @@ private fun JoinContent(
     state: JoinUiState,
     onCreateGameClicked: () -> Unit,
     onJoinGameClicked: () -> Unit,
-    onCreateSession: () -> Unit,
-    onJoinToSession: () -> Unit
+    onCreateSession: (name: String) -> Unit,
+    onJoinToSession: (name: String, gameId: String) -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier

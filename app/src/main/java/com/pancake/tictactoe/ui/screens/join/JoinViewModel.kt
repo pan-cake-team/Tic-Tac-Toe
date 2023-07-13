@@ -29,4 +29,12 @@ class JoinViewModel: BaseViewModel<JoinUiState>(JoinUiState()) {
             state.copy(isJoinGameDialogVisible = false)
         }
     }
+
+    fun createGameSession(){
+        //todo: call createGameSession firebase function
+    }
+
+    fun joinToGameSession(){
+        //todo: call joinGameSession firebase function
+    }
 }
