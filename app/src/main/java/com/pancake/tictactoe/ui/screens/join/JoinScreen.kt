@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.join.composable.FullColorButton
 import com.pancake.tictactoe.ui.screens.join.composable.GameOutlineButton
@@ -26,12 +30,26 @@ import com.pancake.tictactoe.ui.theme.space8
 
 //@Preview(backgroundColor = 0xFFEBEAEA)
 @Composable
-fun JoinScreen() {
-    JoinContent()
+fun JoinScreen(
+    navController: NavHostController,
+    viewModel: JoinViewModel = hiltViewModel()
+    ) {
+
+    val state by viewModel.state.collectAsState()
+
+    JoinContent(
+        state = state,
+        onCreateGameClicked = viewModel::showCreateGameDialog,
+        onJoinGameClicked = viewModel::showJoinGameDialog
+    )
 }
 
 @Composable
-private fun JoinContent() {
+private fun JoinContent(
+    state: JoinUiState,
+    onCreateGameClicked: () -> Unit,
+    onJoinGameClicked: () -> Unit,
+) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -55,13 +73,13 @@ private fun JoinContent() {
         ) {
             FullColorButton(
                 title = stringResource(R.string.create_game),
-                onClick = {},
+                onClick = { onCreateGameClicked() },
                 modifier = Modifier.fillMaxWidth()
             )
 
             GameOutlineButton(
                 title = stringResource(R.string.create_game),
-                onClick = {},
+                onClick = { onJoinGameClicked() },
                 modifier = Modifier
                     .fillMaxWidth()
             )
