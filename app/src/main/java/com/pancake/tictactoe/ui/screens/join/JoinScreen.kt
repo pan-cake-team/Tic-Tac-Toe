@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.join.composable.FullColorButton
 import com.pancake.tictactoe.ui.screens.join.composable.GameOutlineButton
@@ -31,7 +31,7 @@ import com.pancake.tictactoe.ui.theme.space8
 //@Preview(backgroundColor = 0xFFEBEAEA)
 @Composable
 fun JoinScreen(
-    navController: NavHostController,
+    navController: NavController,
     viewModel: JoinViewModel = hiltViewModel()
     ) {
 
@@ -40,7 +40,9 @@ fun JoinScreen(
     JoinContent(
         state = state,
         onCreateGameClicked = viewModel::showCreateGameDialog,
-        onJoinGameClicked = viewModel::showJoinGameDialog
+        onJoinGameClicked = viewModel::showJoinGameDialog,
+        onCreateSession = {},
+        onJoinToSession = {}
     )
 }
 
@@ -49,6 +51,8 @@ private fun JoinContent(
     state: JoinUiState,
     onCreateGameClicked: () -> Unit,
     onJoinGameClicked: () -> Unit,
+    onCreateSession: () -> Unit,
+    onJoinToSession: () -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier
