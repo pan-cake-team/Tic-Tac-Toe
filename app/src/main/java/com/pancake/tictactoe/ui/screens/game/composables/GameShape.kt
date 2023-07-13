@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pancake.tictactoe.ui.theme.Green
 import com.pancake.tictactoe.ui.theme.Orange
@@ -15,7 +14,6 @@ import com.pancake.tictactoe.ui.theme.space56
 import com.pancake.tictactoe.ui.theme.space8
 
 @Composable
-@Preview
 fun Cross(
     modifier: Modifier = Modifier
 ) {
@@ -40,7 +38,6 @@ fun Cross(
 }
 
 @Composable
-@Preview
 fun Circle(
     modifier: Modifier = Modifier
 ){
