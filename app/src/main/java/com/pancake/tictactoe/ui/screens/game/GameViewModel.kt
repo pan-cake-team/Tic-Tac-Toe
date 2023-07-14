@@ -14,10 +14,61 @@ class GameViewModel @Inject constructor() : ViewModel() {
 
 
     fun onClickGameBoard(index: Int) {
-        _state.update {
-            it.copy(
-                playerOne = Player(buttonStatus = ButtonStatus.CROSS, buttonSelected = index)
+        val updatedBoardState = _state.value.boarder.toMutableList().apply {
+            this[index] = this[index].copy(
+                state = getUserAction(),
+                isActive = false,
             )
         }
+
+        updateRoundPlayer()
+        _state.update {
+            it.copy(
+                boarder = updatedBoardState
+            )
+        }
+
+    }
+
+    private fun updateRoundPlayer() {
+        val player = _state.value;
+
+        if (player.playerOne.isRoundPlayer) {
+            _state.update {
+                it.copy(
+                    playerOne = it.playerOne.copy(
+                        isRoundPlayer = false
+                    ),
+                    playerTwo = it.playerTwo.copy(
+                        isRoundPlayer = true
+                    )
+                )
+            }
+        } else {
+            _state.update {
+                it.copy(
+                    playerOne = it.playerOne.copy(
+                        isRoundPlayer = true
+                    ),
+                    playerTwo = it.playerTwo.copy(
+                        isRoundPlayer = false
+                    )
+                )
+            }
+        }
+
+    }
+
+    private fun getUserAction(): ItemBoardState {
+        val player = _state.value;
+        if (player.playerOne.isRoundPlayer) {
+            return player.playerOne.action
+
+        }
+
+        if (player.playerTwo.isRoundPlayer) {
+            return player.playerTwo.action
+        }
+        return ItemBoardState.Empty
     }
 }

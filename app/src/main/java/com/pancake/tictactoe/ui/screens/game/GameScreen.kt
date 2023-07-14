@@ -2,7 +2,6 @@ package com.pancake.tictactoe.ui.screens.game
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
+import com.pancake.tictactoe.ui.screens.game.composables.PlayerInfo
 import com.pancake.tictactoe.ui.screens.game.composables.VerticalSpacer
 import com.pancake.tictactoe.ui.theme.Brand
 import com.pancake.tictactoe.ui.theme.backGround
@@ -64,8 +64,8 @@ private fun GameContent(
             VictoryStatus(isWin = true)
             Spacer(modifier = Modifier.weight(1f))
         }
-        GameScore()
-        GameBoard(onClick = onClickGameBoard, state)
+        PlayerInfo(state)
+        GameBoard(state, onClick = onClickGameBoard)
         VerticalSpacer(height = space16)
         IdText(id = state.sessionId)
         Spacer(modifier = Modifier.weight(1f))
@@ -89,30 +89,7 @@ fun TopBar() {
 }
 
 
-@Composable
-fun GameScore(player1: String = "Hassan", player2: String = "Hassan", score: String = "0 - 0") {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = space16, end = space16, bottom = space16),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
 
-        PlayerName(name = player1)
-        ScoreText(text = score)
-        PlayerName(name = player2)
-    }
-}
-
-@Composable
-fun PlayerName(name: String) {
-    Text(
-        text = name,
-        style = mainTypography.titleLarge,
-        color = textPrimary
-    )
-}
 
 @Composable
 fun ScoreText(text: String) {

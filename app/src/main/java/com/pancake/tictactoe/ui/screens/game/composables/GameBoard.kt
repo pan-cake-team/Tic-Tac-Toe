@@ -12,60 +12,48 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pancake.tictactoe.ui.screens.game.ButtonStatus
 import com.pancake.tictactoe.ui.screens.game.GameUiState
+import com.pancake.tictactoe.ui.screens.game.ItemBoardState
+import com.pancake.tictactoe.ui.screens.game.ItemBoarderUiSate
 import com.pancake.tictactoe.ui.theme.Gray
-import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GameBoard(onClick: (Int) -> Unit, state: GameUiState) {
+fun GameBoard(
+    state: GameUiState,
+    onClick: (Int) -> Unit
+) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(3)
     ) {
-        items(count = 9) {
-            val symbol = remember { MutableStateFlow(getTheSuitableSymbol(state,it)) }
-            symbol.value = getTheSuitableSymbol(state,it)
-            GameBoardItem(onClick = { onClick(it) }, symbol.value, state.isTurn)
+        items(count = state.boarder.size) { index ->
+            GameBoardItem(
+                state.boarder[index],
+                onClick = { onClick(index) },
+            )
         }
     }
 }
 
 @Composable
-fun GameBoardItem(onClick: () -> Unit, symbol: String, enable: Boolean) {
+fun GameBoardItem(
+    state: ItemBoarderUiSate,
+    onClick: () -> Unit,
+) {
     Box(
         modifier = Modifier
             .border(width = 1.dp, color = Gray)
-            .clickable(onClick = onClick, enabled = enable)
+            .clickable(onClick = onClick, enabled = state.isActive)
             .padding(26.dp),
     ) {
-        when (symbol) {
-            "o" -> Circle(modifier = Modifier.align(Alignment.Center))
-            "x" -> Cross(modifier = Modifier.align(Alignment.Center))
+        when (state.state) {
+            ItemBoardState.CIRCLE -> CircleShape()
+            ItemBoardState.CROSS -> Cross()
             else -> Spacer(modifier = Modifier.size(56.dp))
         }
     }
 }
 
-fun getTheSuitableSymbol(state: GameUiState, index: Int): String {
-    var symbol = ""
-    if (state.playerOne.buttonSelected == index) {
-        symbol = when (state.playerOne.buttonStatus) {
-            ButtonStatus.CROSS -> "x"
-            ButtonStatus.CIRCLE -> "o"
-            ButtonStatus.Empty -> ""
-        }
-    } else if (state.playerTwo.buttonSelected == index) {
-        symbol = when (state.playerTwo.buttonStatus) {
-            ButtonStatus.CROSS -> "x"
-            ButtonStatus.CIRCLE -> "o"
-            ButtonStatus.Empty -> ""
-        }
-    }
-    return symbol
-}

@@ -3,19 +3,54 @@ package com.pancake.tictactoe.ui.screens.game
 data class GameUiState(
     val sessionId: String = "",
     val isTurn: Boolean = true,
-    val playerOne: Player = Player(),
-    val playerTwo: Player = Player(),
+    var idOwnerGame: String = "Ahmed12345",
+
+    val playerOne: PlayerUiState = PlayerUiState(
+        id = "Ameer12345",
+        name = "Ameer",
+        isRoundPlayer = false,
+        action = ItemBoardState.CIRCLE,
+        score = 0,
+    ),
+    val playerTwo: PlayerUiState = PlayerUiState(
+        id = "Ahmed12345",
+        name = "Ahmed",
+        isRoundPlayer = true,
+        action = ItemBoardState.CROSS,
+        score = 0,
+    ),
+    val boarder: List<ItemBoarderUiSate> = listOf(
+        ItemBoarderUiSate(id = 1),
+        ItemBoarderUiSate(id = 2),
+        ItemBoarderUiSate(id = 3),
+
+        ItemBoarderUiSate(id = 4),
+        ItemBoarderUiSate(id = 5),
+        ItemBoarderUiSate(id = 6),
+
+        ItemBoarderUiSate(id = 7),
+        ItemBoarderUiSate(id = 8),
+        ItemBoarderUiSate(id = 9),
+    ),
     val isFinished: Boolean = false,
 )
 
-data class Player(
-    val name: String = "",
-    val score: Int = 0,
-    val buttonStatus: ButtonStatus = ButtonStatus.Empty,
-    val buttonSelected: Int = -1,
+data class ItemBoarderUiSate(
+    var id: Int = 0,
+    var state: ItemBoardState = ItemBoardState.Empty,
+    var isActive: Boolean = true,
+    var idUserClicked: String = "",
 )
 
-enum class ButtonStatus {
+data class PlayerUiState(
+    var id: String = "",
+    var action: ItemBoardState = ItemBoardState.Empty,
+    val name: String = "",
+    var isRoundPlayer: Boolean = false,
+    val score: Int = 0,
+)
+
+enum class ItemBoardState {
     Empty,
     CROSS,
     CIRCLE
