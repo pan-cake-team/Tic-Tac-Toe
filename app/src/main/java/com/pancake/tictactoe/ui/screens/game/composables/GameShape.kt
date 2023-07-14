@@ -9,10 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import com.pancake.tictactoe.ui.theme.Green
-import com.pancake.tictactoe.ui.theme.Orange
 
 @Composable
 fun Cross(
@@ -41,22 +39,3 @@ fun Cross(
     }
 }
 
-@Composable
-fun Circle(
-    modifier: Modifier = Modifier
-) {
-//    Box(Modifier.fillMaxSize()) {
-        Canvas(
-            modifier = modifier
-//                .align(Alignment.Center)
-                .size(56.dp)
-                .padding(8.dp)
-        ) {
-            drawCircle(
-                color = Orange,
-                style = Stroke(40f)
-            )
-        }
-//    }
-
-}

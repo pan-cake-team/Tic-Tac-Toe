@@ -14,8 +14,8 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pancake.tictactoe.ui.screens.game.ButtonStatus
 import com.pancake.tictactoe.ui.screens.game.GameUiState
+import com.pancake.tictactoe.ui.screens.game.ItemBoardState
 import com.pancake.tictactoe.ui.screens.game.ItemBoarderUiSate
 import com.pancake.tictactoe.ui.theme.Gray
 
@@ -30,10 +30,8 @@ fun GameBoard(
         cells = GridCells.Fixed(3)
     ) {
         items(count = state.boarder.size) { index ->
-
             GameBoardItem(
                 state.boarder[index],
-
                 onClick = { onClick(index) },
             )
         }
@@ -52,8 +50,8 @@ fun GameBoardItem(
             .padding(26.dp),
     ) {
         when (state.state) {
-            ButtonStatus.CIRCLE -> Circle()
-            ButtonStatus.CROSS -> Cross()
+            ItemBoardState.CIRCLE -> CircleShape()
+            ItemBoardState.CROSS -> Cross()
             else -> Spacer(modifier = Modifier.size(56.dp))
         }
     }

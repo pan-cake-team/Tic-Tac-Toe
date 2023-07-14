@@ -22,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
-import com.pancake.tictactoe.ui.screens.game.composables.GameScore
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
+import com.pancake.tictactoe.ui.screens.game.composables.PlayerInfo
 import com.pancake.tictactoe.ui.screens.game.composables.VerticalSpacer
 import com.pancake.tictactoe.ui.theme.Brand
 import com.pancake.tictactoe.ui.theme.backGround
@@ -64,7 +64,7 @@ private fun GameContent(
             VictoryStatus(isWin = true)
             Spacer(modifier = Modifier.weight(1f))
         }
-        GameScore(state)
+        PlayerInfo(state)
         GameBoard(state, onClick = onClickGameBoard)
         VerticalSpacer(height = space16)
         IdText(id = state.sessionId)

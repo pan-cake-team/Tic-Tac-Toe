@@ -1,10 +1,5 @@
 package com.pancake.tictactoe.ui.screens.game
 
-import androidx.compose.ui.graphics.Color
-import com.pancake.tictactoe.ui.theme.Green
-import com.pancake.tictactoe.ui.theme.Orange
-import com.pancake.tictactoe.ui.theme.textPrimary
-
 data class GameUiState(
     val sessionId: String = "",
     val isTurn: Boolean = true,
@@ -14,14 +9,14 @@ data class GameUiState(
         id = "Ameer12345",
         name = "Ameer",
         isRoundPlayer = false,
-        action = ButtonStatus.CIRCLE,
+        action = ItemBoardState.CIRCLE,
         score = 0,
     ),
     val playerTwo: PlayerUiState = PlayerUiState(
         id = "Ahmed12345",
         name = "Ahmed",
         isRoundPlayer = true,
-        action = ButtonStatus.CROSS,
+        action = ItemBoardState.CROSS,
         score = 0,
     ),
     val boarder: List<ItemBoarderUiSate> = listOf(
@@ -42,31 +37,21 @@ data class GameUiState(
 
 data class ItemBoarderUiSate(
     var id: Int = 0,
-    var state: ButtonStatus = ButtonStatus.Empty,
+    var state: ItemBoardState = ItemBoardState.Empty,
     var isActive: Boolean = true,
     var idUserClicked: String = "",
 )
 
 data class PlayerUiState(
     var id: String = "",
-    var action: ButtonStatus = ButtonStatus.Empty,
+    var action: ItemBoardState = ItemBoardState.Empty,
     val name: String = "",
     var isRoundPlayer: Boolean = false,
     val score: Int = 0,
 )
-enum class ButtonStatus {
+
+enum class ItemBoardState {
     Empty,
     CROSS,
     CIRCLE
-}
-
-fun ButtonStatus.getColor(stateUser: Boolean): Color {
-    if (this == ButtonStatus.CROSS && stateUser) {
-        return Green
-    }
-    if (this == ButtonStatus.CIRCLE && stateUser) {
-        return  Orange
-    }
-    return textPrimary
-
 }
