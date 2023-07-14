@@ -6,12 +6,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.pancake.tictactoe.ui.screens.game.ItemBoardState
 import com.pancake.tictactoe.ui.screens.game.PlayerUiState
 import com.pancake.tictactoe.ui.theme.mainTypography
+import com.pancake.tictactoe.ui.uitll.extensions.getColorState
 
 @Composable
 fun PlayerName(state: PlayerUiState) {
     Text(
         text = state.name,
         style = mainTypography.titleLarge,
+        color = state.action.getColorState(state.isRoundPlayer)
     )
 }
 
@@ -36,7 +38,7 @@ private fun PlayerNameNotRoundUserPreview() {
         PlayerUiState(
             name = "Ameer",
             isRoundPlayer = false,
-            action =  ItemBoardState.CROSS,
+            action = ItemBoardState.CIRCLE,
         ),
     )
 }

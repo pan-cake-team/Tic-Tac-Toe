@@ -51,7 +51,7 @@ fun GameBoardItem(
     ) {
         when (state.state) {
             ItemBoardState.CIRCLE -> CircleShape()
-            ItemBoardState.CROSS -> Cross()
+            ItemBoardState.CROSS -> CrossShape()
             else -> Spacer(modifier = Modifier.size(56.dp))
         }
     }
