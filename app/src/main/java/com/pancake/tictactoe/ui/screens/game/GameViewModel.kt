@@ -27,11 +27,10 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 boarder = updatedBoardState
             )
         }
-
     }
 
     private fun updateRoundPlayer() {
-        val player = _state.value;
+        val player = _state.value
 
         if (player.playerOne.isRoundPlayer) {
             _state.update {
@@ -60,7 +59,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun getUserAction(): ItemBoardState {
-        val player = _state.value;
+        val player = _state.value
         if (player.playerOne.isRoundPlayer) {
             return player.playerOne.action
 
@@ -69,6 +68,40 @@ class GameViewModel @Inject constructor() : ViewModel() {
         if (player.playerTwo.isRoundPlayer) {
             return player.playerTwo.action
         }
-        return ItemBoardState.Empty
+        return ItemBoardState.EMPTY
+    }
+
+
+    private fun getTheWinner(index: Int): ItemBoardState {
+        return when (_state.value.boarder[index].state) {
+            ItemBoardState.CROSS -> if (checkIfWin(ItemBoardState.CROSS)) ItemBoardState.CROSS else ItemBoardState.EMPTY
+            ItemBoardState.CIRCLE -> if (checkIfWin(ItemBoardState.CIRCLE)) ItemBoardState.CIRCLE else ItemBoardState.EMPTY
+            else -> ItemBoardState.EMPTY
+        }
+    }
+
+    private fun checkIfWin(itemBoardState: ItemBoardState): Boolean {
+        val listItemBorder = _state.value.boarder
+
+        for (i in listItemBorder.indices step 3) {
+            if (listItemBorder[i].state == itemBoardState && listItemBorder[i + 1].state == itemBoardState && listItemBorder[i + 2].state == itemBoardState) {
+                return true
+            }
+        }
+
+        for (i in 0 until 3) {
+            if (listItemBorder[i].state == itemBoardState && listItemBorder[i + 3].state == itemBoardState && listItemBorder[i + 6].state == itemBoardState) {
+                return true
+            }
+        }
+
+        if (listItemBorder[0].state == itemBoardState && listItemBorder[4].state == itemBoardState && listItemBorder[8].state == itemBoardState) {
+            return true
+        }
+        if (listItemBorder[2].state == itemBoardState && listItemBorder[4].state == itemBoardState && listItemBorder[6].state == itemBoardState) {
+            return true
+        }
+
+        return false
     }
 }
