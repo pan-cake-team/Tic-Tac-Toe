@@ -37,21 +37,21 @@ data class GameUiState(
 
 data class ItemBoarderUiSate(
     var id: Int = 0,
-    var state: ItemBoardState = ItemBoardState.Empty,
+    var state: ItemBoardState = ItemBoardState.EMPTY,
     var isActive: Boolean = true,
     var idUserClicked: String = "",
 )
 
 data class PlayerUiState(
     var id: String = "",
-    var action: ItemBoardState = ItemBoardState.Empty,
+    var action: ItemBoardState = ItemBoardState.EMPTY,
     val name: String = "",
     var isRoundPlayer: Boolean = false,
     val score: Int = 0,
 )
 
 enum class ItemBoardState {
-    Empty,
+    EMPTY,
     CROSS,
     CIRCLE
 }
