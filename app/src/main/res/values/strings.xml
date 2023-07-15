@@ -5,4 +5,5 @@
     <string name="you_lose">You Lose</string>
     <string name="win_message">Congratulation</string>
     <string name="lose_message">Good luck next time</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -2,21 +2,23 @@ package com.pancake.tictactoe.ui.screens.game
 
 data class GameUiState(
     val sessionId: String = "",
-    val isTurn: Boolean = true,
     var idOwnerGame: String = "Ahmed12345",
+    val counter: Int = 0,
+    val gameStatus: GameStatus = GameStatus.NOT_FINISH,
+    val dialogState: Boolean = true,
 
     val playerOne: PlayerUiState = PlayerUiState(
         id = "Ameer12345",
         name = "Ameer",
-        isRoundPlayer = false,
-        action = ItemBoardState.CIRCLE,
+        isRoundPlayer = true,
+        action = ItemBoardState.CROSS,
         score = 0,
     ),
     val playerTwo: PlayerUiState = PlayerUiState(
         id = "Ahmed12345",
         name = "Ahmed",
-        isRoundPlayer = true,
-        action = ItemBoardState.CROSS,
+        isRoundPlayer = false,
+        action = ItemBoardState.CIRCLE,
         score = 0,
     ),
     val boarder: List<ItemBoarderUiSate> = listOf(
@@ -37,21 +39,28 @@ data class GameUiState(
 
 data class ItemBoarderUiSate(
     var id: Int = 0,
-    var state: ItemBoardState = ItemBoardState.Empty,
+    var state: ItemBoardState = ItemBoardState.EMPTY,
     var isActive: Boolean = true,
     var idUserClicked: String = "",
 )
 
 data class PlayerUiState(
     var id: String = "",
-    var action: ItemBoardState = ItemBoardState.Empty,
+    var action: ItemBoardState = ItemBoardState.EMPTY,
     val name: String = "",
     var isRoundPlayer: Boolean = false,
     val score: Int = 0,
 )
 
 enum class ItemBoardState {
-    Empty,
+    EMPTY,
     CROSS,
     CIRCLE
+}
+
+enum class GameStatus {
+    PLAYER_ONE_WIN,
+    PLAYER_TWO_WIN,
+    NOT_FINISH,
+    DRAW,
 }

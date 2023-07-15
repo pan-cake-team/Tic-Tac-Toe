@@ -24,6 +24,7 @@ import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
 import com.pancake.tictactoe.ui.screens.game.composables.PlayerInfo
+import com.pancake.tictactoe.ui.screens.game.composables.ResultDialog
 import com.pancake.tictactoe.ui.screens.game.composables.VerticalSpacer
 import com.pancake.tictactoe.ui.theme.Brand
 import com.pancake.tictactoe.ui.theme.backGround
@@ -42,14 +43,18 @@ fun GameScreen(
     val state by viewModel.state.collectAsState()
     GameContent(
         state = state,
-        onClickGameBoard = viewModel::onClickGameBoard
+        onClickGameBoard = viewModel::onClickGameBoard,
+        onDismissDialog = viewModel::onClickDismissDialog,
+        onClickPlayAgain = viewModel::onClickPlayAgain
     )
 }
 
 @Composable
 private fun GameContent(
     state: GameUiState,
-    onClickGameBoard: (Int) -> Unit
+    onClickGameBoard: (Int) -> Unit,
+    onDismissDialog: () -> Unit,
+    onClickPlayAgain: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -61,6 +66,8 @@ private fun GameContent(
         TopBar()
         Spacer(modifier = Modifier.weight(1f))
         if (state.isFinished) {
+            if (state.dialogState)
+                ResultDialog(state, onDismiss = onDismissDialog)
             VictoryStatus(isWin = true)
             Spacer(modifier = Modifier.weight(1f))
         }
@@ -70,7 +77,7 @@ private fun GameContent(
         IdText(id = state.sessionId)
         Spacer(modifier = Modifier.weight(1f))
         if (state.isFinished) {
-            PlayButton(onClick = {})
+            PlayButton(onClick = onClickPlayAgain)
         }
     }
 }
@@ -87,8 +94,6 @@ fun TopBar() {
         )
     }
 }
-
-
 
 
 @Composable
