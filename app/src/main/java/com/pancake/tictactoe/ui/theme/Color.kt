@@ -25,4 +25,6 @@ val Green = Color(0xFF4C9077)
 val Orange = Color(0xFFFB9E20)
 val Gray = Color(0xFFBABABA)
 
+val TextTertiary = Color(0x5416110A)
+
 

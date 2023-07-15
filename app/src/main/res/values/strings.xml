@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
+
+    <string name="tic_tac_toe">Tic Tac Toe</string>
+    <string name="play_with_friend">Play with your friend</string>
+    <string name="create_game">Create game</string>
+
     <string name="play_again">Play again</string>
     <string name="you_win">You Win</string>
     <string name="you_lose">You Lose</string>
     <string name="win_message">Congratulation</string>
     <string name="lose_message">Good luck next time</string>
     <string name="ok">Ok</string>
+
 </resources>

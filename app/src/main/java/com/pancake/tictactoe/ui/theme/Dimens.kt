@@ -38,4 +38,8 @@ val padding10 = 10.dp
 
 // Border
 val border1 = 1.dp
+
+val buttonHeight = 56.dp
+
 val sizeItemBoard = 56.dp
+
