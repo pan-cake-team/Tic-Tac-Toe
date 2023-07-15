@@ -24,9 +24,15 @@ class GameViewModel @Inject constructor() : ViewModel() {
         updateRoundPlayer()
         _state.update {
             it.copy(
-                boarder = updatedBoardState
+                boarder = updatedBoardState,
+                isTurn = !_state.value.isTurn,
+                counter = _state.value.counter + 1
             )
         }
+        val gameStatus = getGameStatus()
+        _state.update { it.copy(gameStatus = gameStatus) }
+
+        updateScore(gameStatus)
     }
 
     private fun updateRoundPlayer() {
@@ -71,12 +77,44 @@ class GameViewModel @Inject constructor() : ViewModel() {
         return ItemBoardState.EMPTY
     }
 
+    private fun updateScore(gameStatus: GameStatus) {
+        when (gameStatus) {
+            GameStatus.PLAYER_ONE_WIN -> _state.update {
+                it.copy(
+                    isFinished = true,
+                    playerOne = _state.value.playerOne.copy(
+                        score = _state.value.playerOne.score + 1
+                    )
+                )
+            }
 
-    private fun getTheWinner(index: Int): ItemBoardState {
-        return when (_state.value.boarder[index].state) {
-            ItemBoardState.CROSS -> if (checkIfWin(ItemBoardState.CROSS)) ItemBoardState.CROSS else ItemBoardState.EMPTY
-            ItemBoardState.CIRCLE -> if (checkIfWin(ItemBoardState.CIRCLE)) ItemBoardState.CIRCLE else ItemBoardState.EMPTY
-            else -> ItemBoardState.EMPTY
+            GameStatus.PLAYER_TWO_WIN -> _state.update {
+                it.copy(
+                    isFinished = true,
+                    playerOne = _state.value.playerTwo.copy(
+                        score = _state.value.playerTwo.score + 1
+                    )
+                )
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun getGameStatus(): GameStatus {
+        val player = _state.value
+        return if (player.isTurn) {
+            when (checkIfWin(player.playerOne.action)) {
+
+                true -> GameStatus.PLAYER_ONE_WIN
+
+                false -> if (player.counter != 9) GameStatus.NOT_FINISH else GameStatus.DRAW
+            }
+        } else {
+            when (checkIfWin(player.playerTwo.action)) {
+                true -> GameStatus.PLAYER_TWO_WIN
+                false -> if (player.counter != 9) GameStatus.NOT_FINISH else GameStatus.DRAW
+            }
         }
     }
 
