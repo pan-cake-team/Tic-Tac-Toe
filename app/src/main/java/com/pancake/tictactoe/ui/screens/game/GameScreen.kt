@@ -44,7 +44,8 @@ fun GameScreen(
     GameContent(
         state = state,
         onClickGameBoard = viewModel::onClickGameBoard,
-        onDismissDialog = viewModel::onClickDismissDialog
+        onDismissDialog = viewModel::onClickDismissDialog,
+        onClickPlayAgain = viewModel::onClickPlayAgain
     )
 }
 
@@ -52,7 +53,8 @@ fun GameScreen(
 private fun GameContent(
     state: GameUiState,
     onClickGameBoard: (Int) -> Unit,
-    onDismissDialog: () -> Unit
+    onDismissDialog: () -> Unit,
+    onClickPlayAgain: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -75,7 +77,7 @@ private fun GameContent(
         IdText(id = state.sessionId)
         Spacer(modifier = Modifier.weight(1f))
         if (state.isFinished) {
-            PlayButton(onClick = {})
+            PlayButton(onClick = onClickPlayAgain)
         }
     }
 }
