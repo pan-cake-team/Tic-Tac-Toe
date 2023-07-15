@@ -35,31 +35,33 @@ import com.pancake.tictactoe.ui.theme.textSize16
 
 @Composable
 fun ResultDialog(state: GameUiState, onDismiss: () -> Unit) {
+    val isRound = !state.playerOne.isRoundPlayer
+
     val playerStatement = when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (!state.isTurn) "Congrats ${state.playerOne.name} Win" else "Sorry you lose"
-        GameStatus.PLAYER_TWO_WIN -> if (!state.isTurn) "Congrats ${state.playerTwo.name} Win" else "Sorry you lose"
+        GameStatus.PLAYER_ONE_WIN -> if (isRound) "Congrats ${state.playerOne.name} Win" else "Sorry you lose"
+        GameStatus.PLAYER_TWO_WIN -> if (isRound) "Congrats ${state.playerTwo.name} Win" else "Sorry you lose"
         GameStatus.DRAW -> "Victory Draw"
         else -> ""
     }
-
     val color = when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (!state.isTurn) Color(0xFFFFE437) else Color(0xFFFF3434)
-        GameStatus.PLAYER_TWO_WIN -> if (!state.isTurn) Color(0xFFFFE437) else Color(0xFFFF3434)
+        GameStatus.PLAYER_ONE_WIN -> if (isRound) Color(0xFFFFE437) else Color(0xFFFF3434)
+        GameStatus.PLAYER_TWO_WIN -> if (isRound) Color(0xFFFFE437) else Color(0xFFFF3434)
         GameStatus.DRAW -> Color(0xFF000000)
         else -> Color.White
     }
     val image = when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (!state.isTurn) painterResource(R.drawable.image_winer) else painterResource(
+        GameStatus.PLAYER_ONE_WIN -> if (isRound) painterResource(R.drawable.image_winer) else painterResource(
             R.drawable.image_lose
         )
 
-        GameStatus.PLAYER_TWO_WIN -> if (!state.isTurn) painterResource(R.drawable.image_winer) else painterResource(
+        GameStatus.PLAYER_TWO_WIN -> if (isRound) painterResource(R.drawable.image_winer) else painterResource(
             R.drawable.image_lose
         )
 
         GameStatus.DRAW -> painterResource(R.drawable.image_draw)
         else -> painterResource(R.drawable.image_draw)
     }
+
     Dialog(onDismissRequest = onDismiss) {
         Box(
             Modifier
