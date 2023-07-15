@@ -4,6 +4,8 @@ data class GameUiState(
     val sessionId: String = "",
     val isTurn: Boolean = true,
     var idOwnerGame: String = "Ahmed12345",
+    val counter: Int = 0,
+    val gameStatus: GameStatus = GameStatus.NOT_FINISH,
 
     val playerOne: PlayerUiState = PlayerUiState(
         id = "Ameer12345",
@@ -54,4 +56,11 @@ enum class ItemBoardState {
     EMPTY,
     CROSS,
     CIRCLE
+}
+
+enum class GameStatus {
+    PLAYER_ONE_WIN,
+    PLAYER_TWO_WIN,
+    NOT_FINISH,
+    DRAW,
 }
