@@ -5,6 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.pancake.tictactoe.ui.screens.join.composable.joinRoute
 import com.pancake.tictactoe.ui.screens.welcome.welcomeRoute
+import androidx.navigation.compose.composable
+import com.pancake.tictactoe.ui.screens.game.GameScreen
+
 
 @Composable
 fun MainNavigationGraph(navController: NavHostController) {
@@ -15,10 +18,15 @@ fun MainNavigationGraph(navController: NavHostController) {
     ) {
         welcomeRoute(navController)
         joinRoute(navController)
+        startDestination = MainNavigationGraph.GAME_SCREEN
+    ) {
+        composable(MainNavigationGraph.GAME_SCREEN) { GameScreen() }
+
     }
 }
 
 object MainNavigationGraph {
     const val WELCOME_SCREEN = "welcomeScreen"
     const val JOIN_SCREEN = "joinScreen"
+    const val GAME_SCREEN = "gameScreen"
 }
