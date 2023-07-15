@@ -6,6 +6,7 @@ data class GameUiState(
     var idOwnerGame: String = "Ahmed12345",
     val counter: Int = 0,
     val gameStatus: GameStatus = GameStatus.NOT_FINISH,
+    val dialogState: Boolean = true,
 
     val playerOne: PlayerUiState = PlayerUiState(
         id = "Ameer12345",
