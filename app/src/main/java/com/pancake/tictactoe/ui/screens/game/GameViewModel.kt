@@ -21,18 +21,18 @@ class GameViewModel @Inject constructor() : ViewModel() {
             )
         }
 
-        updateRoundPlayer()
         _state.update {
             it.copy(
                 boarder = updatedBoardState,
-                isTurn = !_state.value.isTurn,
                 counter = _state.value.counter + 1
             )
         }
+
         val gameStatus = getGameStatus()
         _state.update { it.copy(gameStatus = gameStatus) }
 
         updateScore(gameStatus)
+        updateRoundPlayer()
     }
 
     private fun updateRoundPlayer() {
@@ -83,17 +83,17 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 it.copy(
                     isFinished = true,
                     playerOne = _state.value.playerOne.copy(
-                        score = _state.value.playerOne.score + 1
-                    )
+                        score = _state.value.playerOne.score + 1,
+                    ),
                 )
             }
 
             GameStatus.PLAYER_TWO_WIN -> _state.update {
                 it.copy(
                     isFinished = true,
-                    playerOne = _state.value.playerTwo.copy(
-                        score = _state.value.playerTwo.score + 1
-                    )
+                    playerTwo = _state.value.playerTwo.copy(
+                        score = _state.value.playerTwo.score + 1,
+                    ),
                 )
             }
 
@@ -107,7 +107,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
 
     private fun getGameStatus(): GameStatus {
         val player = _state.value
-        return if (player.isTurn) {
+        return if (player.playerOne.isRoundPlayer) {
             when (checkIfWin(player.playerOne.action)) {
                 true -> GameStatus.PLAYER_ONE_WIN
                 false -> if (player.counter != 9) GameStatus.NOT_FINISH else GameStatus.DRAW
@@ -153,7 +153,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         _state.update {
             it.copy(
                 boarder = itemsBoard,
-                isTurn = true,
                 counter = 0,
                 gameStatus = GameStatus.NOT_FINISH,
                 dialogState = true,
