@@ -109,9 +109,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
         val player = _state.value
         return if (player.isTurn) {
             when (checkIfWin(player.playerOne.action)) {
-
                 true -> GameStatus.PLAYER_ONE_WIN
-
                 false -> if (player.counter != 9) GameStatus.NOT_FINISH else GameStatus.DRAW
             }
         } else {
@@ -145,6 +143,23 @@ class GameViewModel @Inject constructor() : ViewModel() {
         }
 
         return false
+    }
+
+    fun onClickPlayAgain() {
+        val itemsBoard = mutableListOf<ItemBoarderUiSate>()
+        for (i in 0..8) {
+            itemsBoard.add(ItemBoarderUiSate(id = i))
+        }
+        _state.update {
+            it.copy(
+                boarder = itemsBoard,
+                isTurn = true,
+                counter = 0,
+                gameStatus = GameStatus.NOT_FINISH,
+                dialogState = true,
+                isFinished = false
+            )
+        }
     }
 
     fun onClickDismissDialog() {
