@@ -97,6 +97,10 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 )
             }
 
+            GameStatus.DRAW -> {
+                _state.update { it.copy(isFinished = true) }
+            }
+
             else -> {}
         }
     }
@@ -141,5 +145,9 @@ class GameViewModel @Inject constructor() : ViewModel() {
         }
 
         return false
+    }
+
+    fun onClickDismissDialog() {
+        _state.update { it.copy(dialogState = false) }
     }
 }
