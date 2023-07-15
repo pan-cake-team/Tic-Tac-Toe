@@ -18,8 +18,6 @@ fun MainNavigationGraph(navController: NavHostController) {
     ) {
         welcomeRoute(navController)
         joinRoute(navController)
-        startDestination = MainNavigationGraph.GAME_SCREEN
-    ) {
         composable(MainNavigationGraph.GAME_SCREEN) { GameScreen() }
 
     }
