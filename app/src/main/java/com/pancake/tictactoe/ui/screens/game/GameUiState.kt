@@ -2,7 +2,6 @@ package com.pancake.tictactoe.ui.screens.game
 
 data class GameUiState(
     val sessionId: String = "",
-    val isTurn: Boolean = true,
     var idOwnerGame: String = "Ahmed12345",
     val counter: Int = 0,
     val gameStatus: GameStatus = GameStatus.NOT_FINISH,
@@ -11,15 +10,15 @@ data class GameUiState(
     val playerOne: PlayerUiState = PlayerUiState(
         id = "Ameer12345",
         name = "Ameer",
-        isRoundPlayer = false,
-        action = ItemBoardState.CIRCLE,
+        isRoundPlayer = true,
+        action = ItemBoardState.CROSS,
         score = 0,
     ),
     val playerTwo: PlayerUiState = PlayerUiState(
         id = "Ahmed12345",
         name = "Ahmed",
-        isRoundPlayer = true,
-        action = ItemBoardState.CROSS,
+        isRoundPlayer = false,
+        action = ItemBoardState.CIRCLE,
         score = 0,
     ),
     val boarder: List<ItemBoarderUiSate> = listOf(
