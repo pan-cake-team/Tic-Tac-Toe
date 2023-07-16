@@ -46,9 +46,9 @@ data class GameUiState(
 data class ItemBoarderUiSate(
     var id: Int = 0,
     var state: ItemBoardState = ItemBoardState.EMPTY,
-    var isActive: Boolean = true,
-    var idUserClicked: String = "",
-)
+) {
+    fun isActiveItemBoarderCell() = state == ItemBoardState.EMPTY
+}
 
 data class PlayerUiState(
     var id: String = "",

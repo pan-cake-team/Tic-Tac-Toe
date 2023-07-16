@@ -49,6 +49,7 @@ fun GameBoard(
             }
             GameBoardItem(
                 itemBoardState,
+                isGameFinished = state.isGameFinished(),
                 background = background,
                 onClick = { onClick(index) },
             )
@@ -59,6 +60,7 @@ fun GameBoard(
 @Composable
 fun GameBoardItem(
     state: ItemBoarderUiSate,
+    isGameFinished: Boolean = false,
     background: Color = backGround,
     onClick: () -> Unit,
 ) {
@@ -66,7 +68,11 @@ fun GameBoardItem(
         modifier = Modifier
             .background(background)
             .border(width = 1.dp, color = Gray)
-            .clickable(onClick = onClick, enabled = state.isActive)
+            .clickable(
+                onClick = onClick,
+                enabled = if (isGameFinished) false
+                else state.isActiveItemBoarderCell()
+            )
             .padding(26.dp),
     ) {
         when (state.state) {

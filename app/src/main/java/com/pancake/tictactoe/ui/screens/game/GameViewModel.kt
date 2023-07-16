@@ -17,7 +17,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         val updatedBoardState = _state.value.boarder.toMutableList().apply {
             this[index] = this[index].copy(
                 state = getUserAction(),
-                isActive = false,
             )
         }
 
@@ -104,7 +103,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         return if (player.playerOne.isRoundPlayer) {
             when (checkIfWin(player.playerOne.action)) {
                 true -> {
-                    preventUserCompleteGame()
                     GameStatus.PLAYER_ONE_WIN
                 }
 
@@ -113,7 +111,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         } else {
             when (checkIfWin(player.playerTwo.action)) {
                 true -> {
-                    preventUserCompleteGame()
                     GameStatus.PLAYER_TWO_WIN
                 }
 
@@ -145,16 +142,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         }
 
         return false
-    }
-
-    private fun preventUserCompleteGame() {
-        _state.value.boarder.toMutableList().apply {
-            val items = this
-            for (i in items.indices) {
-                items[i] = items[i].copy(isActive = false)
-            }
-            _state.update { it.copy(boarder = items) }
-        }
     }
 
     fun onClickPlayAgain() {
