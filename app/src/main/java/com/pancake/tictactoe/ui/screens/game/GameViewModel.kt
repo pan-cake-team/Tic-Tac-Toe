@@ -1,17 +1,28 @@
 package com.pancake.tictactoe.ui.screens.game
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.pancake.tictactoe.domain.usecase.UpdateGameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor() : ViewModel() {
+class GameViewModel @Inject constructor(
+    gameUseCase: UpdateGameUseCase,
+) : ViewModel() {
     private val _state = MutableStateFlow(GameUiState())
     val state = _state.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            gameUseCase("165dccc522ae")
+        }
+
+    }
 
     fun onClickGameBoard(index: Int) {
         val updatedBoardState = _state.value.boarder.toMutableList().apply {
@@ -151,7 +162,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
         }
         _state.update {
             it.copy(
-                boarder = itemsBoard,
+//                boarder = itemsBoard,
                 counter = 0,
                 gameStatus = GameStatus.NOT_FINISH,
                 dialogState = true,

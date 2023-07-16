@@ -1,18 +1,19 @@
 package com.pancake.tictactoe.data.remote
 
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService.Companion.generateRandomId
-import com.pancake.tictactoe.data.remote.models.Player
-import com.pancake.tictactoe.data.remote.models.Session
 import com.pancake.tictactoe.data.remote.exceptions.SessionCreationException
 import com.pancake.tictactoe.data.remote.exceptions.SessionJoiningException
 import com.pancake.tictactoe.data.remote.exceptions.SessionRetrievingException
+import com.pancake.tictactoe.data.remote.models.PlayerSession
+import com.pancake.tictactoe.data.remote.models.Session
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlin.jvm.Throws
 
 class FirebaseFireStoreServiceImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
@@ -24,7 +25,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         return suspendCoroutine { continuation ->
             val sessionId = generateRandomId()
             val sessionRef = collection.document(sessionId)
-            val player = Player(name = playerName)
+            val player = PlayerSession(name = playerName)
             val session = Session(
                 id = sessionId,
                 players = mutableListOf(player)
@@ -62,7 +63,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
     @Throws(SessionJoiningException::class)
     override suspend fun joinSession(id: String, playerName: String): Boolean {
         val session = getSession(id = id)
-        val player = Player(name = playerName)
+        val player = PlayerSession(name = playerName)
         return suspendCoroutine { continuation ->
             val sessionRef = collection.document(id)
             session.players.add(player)
@@ -77,6 +78,14 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateGame(sessionId: String): Task<DocumentSnapshot> {
+        return collection.document(sessionId).get()
+    }
+
+    //    inline fun <reified T : Any> T.asMap() : Map<String, Any?> {
+//        val props = T::class.memberProperties.associateBy { it.name }
+//        return props.keys.associateWith { props[it]?.get(this) }
+//    }
     private companion object {
         const val ROOT_COLLECTION_PATH = "Session"
         const val JOIN_PLAYER_PATH = "players"

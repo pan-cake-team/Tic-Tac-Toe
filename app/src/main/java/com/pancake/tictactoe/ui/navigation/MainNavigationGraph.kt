@@ -14,7 +14,7 @@ fun MainNavigationGraph(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = MainNavigationGraph.JOIN_SCREEN
+        startDestination = MainNavigationGraph.GAME_SCREEN
     ) {
         welcomeRoute(navController)
         joinRoute(navController)

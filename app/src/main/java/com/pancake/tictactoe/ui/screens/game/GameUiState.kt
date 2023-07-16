@@ -59,14 +59,34 @@ data class PlayerUiState(
 )
 
 enum class ItemBoardState {
-    EMPTY, //0
-    CROSS, //1
-    CIRCLE //2
+    EMPTY,
+    CROSS,
+    CIRCLE;
+
+    companion object {
+        fun toState(value: String): ItemBoardState? {
+            return try {
+                ItemBoardState.valueOf(value)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
+    }
 }
 
 enum class GameStatus {
     PLAYER_ONE_WIN,
     PLAYER_TWO_WIN,
     NOT_FINISH,
-    DRAW,
+    DRAW;
+
+    companion object {
+        fun toGameStatus(value: String): GameStatus? {
+            return try {
+                valueOf(value)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
+    }
 }
