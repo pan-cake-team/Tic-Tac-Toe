@@ -175,7 +175,7 @@ class GameViewModel @Inject constructor(
         }
         _state.update {
             it.copy(
-//                boarder = itemsBoard,
+                boarder = itemsBoard,
                 counter = 0,
                 gameStatus = GameStatus.NOT_FINISH,
                 dialogState = true,
