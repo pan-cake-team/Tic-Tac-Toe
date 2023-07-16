@@ -1,5 +1,6 @@
 package com.pancake.tictactoe.ui.screens.game
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pancake.tictactoe.domain.usecase.UpdateGameUseCase
@@ -19,7 +20,11 @@ class GameViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            gameUseCase("165dccc522ae")
+            gameUseCase("165dccc522ae").collect { data ->
+                Log.v("ameerxyz", data.toString())
+            }
+
+
         }
 
     }

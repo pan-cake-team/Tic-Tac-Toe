@@ -1,7 +1,6 @@
 package com.pancake.tictactoe.data.remote
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService.Companion.generateRandomId
@@ -78,14 +77,10 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateGame(sessionId: String): Task<DocumentSnapshot> {
-        return collection.document(sessionId).get()
+    override suspend fun getGameDocumentReference(sessionId: String): DocumentReference {
+        return collection.document(sessionId)
     }
 
-    //    inline fun <reified T : Any> T.asMap() : Map<String, Any?> {
-//        val props = T::class.memberProperties.associateBy { it.name }
-//        return props.keys.associateWith { props[it]?.get(this) }
-//    }
     private companion object {
         const val ROOT_COLLECTION_PATH = "Session"
         const val JOIN_PLAYER_PATH = "players"
