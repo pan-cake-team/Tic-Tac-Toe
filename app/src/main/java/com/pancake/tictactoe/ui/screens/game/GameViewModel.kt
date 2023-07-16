@@ -51,11 +51,7 @@ class GameViewModel @Inject constructor(
 
         updateScore(gameStatus)
         updateRoundPlayer()
-        viewModelScope.launch {
-            pushUpdateGame(_state.value.toGame())
-
-
-        }
+        updateGameData()
     }
 
     private fun updateRoundPlayer() {
@@ -181,9 +177,18 @@ class GameViewModel @Inject constructor(
                 dialogState = true,
             )
         }
+        updateGameData()
     }
 
     fun onClickDismissDialog() {
         _state.update { it.copy(dialogState = false) }
     }
+
+
+    private fun updateGameData() {
+        viewModelScope.launch {
+            pushUpdateGame(_state.value.toGame())
+        }
+    }
+
 }
