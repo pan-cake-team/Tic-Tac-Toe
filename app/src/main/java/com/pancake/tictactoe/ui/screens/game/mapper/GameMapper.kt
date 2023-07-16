@@ -7,6 +7,17 @@ import com.pancake.tictactoe.ui.screens.game.GameUiState
 import com.pancake.tictactoe.ui.screens.game.ItemBoarderUiSate
 import com.pancake.tictactoe.ui.screens.game.PlayerUiState
 
+
+fun Player.toPlayerUiState(): PlayerUiState {
+    return PlayerUiState(
+        id = id,
+        name = name,
+        isRoundPlayer = isRoundPlayer,
+        action = action,
+        score = score
+    )
+}
+
 fun GameUiState.toGame(): Game = Game(
     sessionId = sessionId,
     idOwnerGame = idOwnerGame,
@@ -30,3 +41,12 @@ private fun ItemBoarderUiSate.toItemBoarder() = ItemBoarder(
     id = id,
     state = state
 )
+
+fun ItemBoarder.toItemBoarderUiState(): ItemBoarderUiSate {
+    return ItemBoarderUiSate(
+        id = id,
+        state = state
+    )
+
+}
+

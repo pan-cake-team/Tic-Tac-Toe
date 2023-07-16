@@ -3,6 +3,8 @@ package com.pancake.tictactoe.domain.usecase
 import com.google.gson.Gson
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService
 import com.pancake.tictactoe.data.remote.models.GameDto
+import com.pancake.tictactoe.domain.mapper.toGame
+import com.pancake.tictactoe.domain.model.Game
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -12,21 +14,22 @@ class UpdateGameUseCase @Inject constructor(
     private val firestore: FirebaseFireStoreService,
     private val gson: Gson,
 ) {
-    suspend operator fun invoke(sessionId: String): Flow<GameDto> = callbackFlow {
-        val lis = firestore.getGameDocumentReference(sessionId).addSnapshotListener { snapshot, error ->
+    suspend operator fun invoke(sessionId: String): Flow<Game> = callbackFlow {
+        val lis =
+            firestore.getGameDocumentReference(sessionId).addSnapshotListener { snapshot, error ->
 
-            if (snapshot != null && snapshot.exists()) {
-                try {
-                    trySend(convertStringToGameDto(snapshot.data.toString()))
-                } catch (ex: Exception) {
-                    throw IllegalArgumentException(ex)
+                if (snapshot != null && snapshot.exists()) {
+                    try {
+                        trySend(convertStringToGameDto(snapshot.data.toString()).toGame())
+                    } catch (ex: Exception) {
+                        throw IllegalArgumentException(ex)
+                    }
+                } else {
+                    Throwable("Document does not exist.")
+
                 }
-            } else {
-                Throwable("Document does not exist.")
 
             }
-
-        }
 
         awaitClose { lis.remove() }
     }

@@ -1,11 +1,13 @@
 package com.pancake.tictactoe.ui.screens.game
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pancake.tictactoe.domain.model.Game
 import com.pancake.tictactoe.domain.usecase.PushUpdateGameUseCase
 import com.pancake.tictactoe.domain.usecase.UpdateGameUseCase
 import com.pancake.tictactoe.ui.screens.game.mapper.toGame
+import com.pancake.tictactoe.ui.screens.game.mapper.toItemBoarderUiState
+import com.pancake.tictactoe.ui.screens.game.mapper.toPlayerUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,14 +24,34 @@ class GameViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+
+        getGameData()
+    }
+
+    private fun getGameData() {
         viewModelScope.launch {
             gameUseCase("165dccc522ae").collect { data ->
-                Log.v("ameerxyz", data.toString())
+
+                onGetDataSuccess(data)
             }
 
 
         }
+    }
 
+    private fun onGetDataSuccess(data: Game) {
+        _state.update { state ->
+            state.copy(
+                sessionId = data.sessionId,
+                idOwnerGame = data.idOwnerGame,
+                counter = data.counter,
+                gameStatus = data.gameStatus,
+                dialogState = data.dialogState,
+                playerOne = data.playerOne.toPlayerUiState(),
+                playerTwo = data.playerTwo.toPlayerUiState(),
+                boarder = data.boarder.map { it.toItemBoarderUiState() }
+            )
+        }
     }
 
     fun onClickGameBoard(index: Int) {
