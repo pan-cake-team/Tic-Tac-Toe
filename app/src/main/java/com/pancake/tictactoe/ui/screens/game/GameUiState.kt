@@ -34,8 +34,14 @@ data class GameUiState(
         ItemBoarderUiSate(id = 8),
         ItemBoarderUiSate(id = 9),
     ),
-    val isFinished: Boolean = false,
-)
+
+) {
+    fun isGameFinished(): Boolean {
+        return gameStatus == GameStatus.PLAYER_TWO_WIN || gameStatus == GameStatus.PLAYER_ONE_WIN || gameStatus == GameStatus.DRAW
+    }
+
+}
+
 
 data class ItemBoarderUiSate(
     var id: Int = 0,
@@ -53,9 +59,9 @@ data class PlayerUiState(
 )
 
 enum class ItemBoardState {
-    EMPTY,
-    CROSS,
-    CIRCLE
+    EMPTY, //0
+    CROSS, //1
+    CIRCLE //2
 }
 
 enum class GameStatus {

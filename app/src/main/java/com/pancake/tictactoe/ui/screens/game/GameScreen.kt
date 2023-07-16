@@ -65,7 +65,7 @@ private fun GameContent(
     ) {
         TopBar()
         Spacer(modifier = Modifier.weight(1f))
-        if (state.isFinished) {
+        if (state.isGameFinished()) {
             if (state.dialogState)
                 ResultDialog(state, onDismiss = onDismissDialog)
             VictoryStatus(isWin = true)
@@ -76,7 +76,7 @@ private fun GameContent(
         VerticalSpacer(height = space16)
         IdText(id = state.sessionId)
         Spacer(modifier = Modifier.weight(1f))
-        if (state.isFinished) {
+        if (state.isGameFinished()) {
             PlayButton(onClick = onClickPlayAgain)
         }
     }

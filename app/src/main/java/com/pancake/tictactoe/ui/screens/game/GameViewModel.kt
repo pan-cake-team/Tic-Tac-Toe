@@ -81,7 +81,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         when (gameStatus) {
             GameStatus.PLAYER_ONE_WIN -> _state.update {
                 it.copy(
-                    isFinished = true,
                     playerOne = _state.value.playerOne.copy(
                         score = _state.value.playerOne.score + 1,
                     ),
@@ -90,15 +89,10 @@ class GameViewModel @Inject constructor() : ViewModel() {
 
             GameStatus.PLAYER_TWO_WIN -> _state.update {
                 it.copy(
-                    isFinished = true,
                     playerTwo = _state.value.playerTwo.copy(
                         score = _state.value.playerTwo.score + 1,
                     ),
                 )
-            }
-
-            GameStatus.DRAW -> {
-                _state.update { it.copy(isFinished = true) }
             }
 
             else -> {}
@@ -174,7 +168,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 counter = 0,
                 gameStatus = GameStatus.NOT_FINISH,
                 dialogState = true,
-                isFinished = false
             )
         }
     }
