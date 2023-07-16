@@ -13,6 +13,7 @@ interface FirebaseFireStoreService {
     suspend fun createSession(playerName: String): String
     suspend fun joinSession(id: String, playerName: String): Boolean
     suspend fun getGameDocumentReference(sessionId: String): DocumentReference
+    suspend fun updateGame(game: GameDto)
     suspend fun getSession(id: String): Session?
 
     companion object {

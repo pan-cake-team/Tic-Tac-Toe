@@ -16,13 +16,26 @@ fun GameDto.toGame(): Game {
         score = 0,
     )
    return Game(
-        sessionId = sessionId ?: "",
-        idOwnerGame = idOwnerGame ?: "",
-        counter = counter ?: 0,
-        gameStatus = GameStatus.toGameStatus(gameStatus ?: "NOT_FINISH")!!,
-        dialogState = dialogState ?: true,
-        playerOne = playerOne?.toPlayer() ?: player,
-        playerTwo = playerTwo?.toPlayer() ?: player,
-        boarder = boarder?.toItemBoardCell() ?: emptyList()
+       sessionId = sessionId ?: "",
+       idOwnerGame = idOwnerGame ?: "",
+       counter = counter ?: 0,
+       gameStatus = GameStatus.toGameStatus(gameStatus ?: "NOT_FINISH")!!,
+       dialogState = dialogState ?: true,
+       playerOne = playerOne?.toPlayer() ?: player,
+       playerTwo = playerTwo?.toPlayer() ?: player,
+       boarder = boarder?.toItemBoardCell() ?: emptyList()
+   )
+}
+
+fun Game.toGameDto(): GameDto {
+    return GameDto(
+        sessionId = sessionId,
+        idOwnerGame = idOwnerGame,
+        counter = counter,
+        gameStatus = gameStatus.name,
+        dialogState = dialogState,
+        playerOne.toPlayerDto(),
+        playerTwo.toPlayerDto(),
+        boarder.toMapItemBoardCell(),
     )
 }

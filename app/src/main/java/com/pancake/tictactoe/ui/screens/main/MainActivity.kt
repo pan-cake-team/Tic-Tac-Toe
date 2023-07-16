@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 with(firebaseFireStoreService){
 //                    val sessionId = createSession("Ameer")
-                    updateGame("165dccc522ae")
+//                    getGameDocumentReference("165dccc522ae")
 //                    joinSession(sessionId, "mostafa")
                 }
             }

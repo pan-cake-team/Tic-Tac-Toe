@@ -3,7 +3,9 @@ package com.pancake.tictactoe.ui.screens.game
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pancake.tictactoe.domain.usecase.PushUpdateGameUseCase
 import com.pancake.tictactoe.domain.usecase.UpdateGameUseCase
+import com.pancake.tictactoe.ui.screens.game.mapper.toGame
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    gameUseCase: UpdateGameUseCase,
+    private val gameUseCase: UpdateGameUseCase,
+    private val pushUpdateGame: PushUpdateGameUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(GameUiState())
     val state = _state.asStateFlow()
@@ -48,6 +51,11 @@ class GameViewModel @Inject constructor(
 
         updateScore(gameStatus)
         updateRoundPlayer()
+        viewModelScope.launch {
+            pushUpdateGame(_state.value.toGame())
+
+
+        }
     }
 
     private fun updateRoundPlayer() {

@@ -5,14 +5,14 @@ import com.pancake.tictactoe.ui.screens.game.ItemBoardState
 
 
 fun Map<String, String>.toItemBoardCell(): List<ItemBoarder> {
-    val itemList = mutableListOf<ItemBoarder>()
-
-    for ((key, value) in this) {
+    return this.map { (key, value) ->
         val id = key.toInt()
-       val state = ItemBoardState.toState(value)!!
-
-        itemList.add(ItemBoarder(id, state))
+        val state = ItemBoardState.toState(value) ?: throw IllegalArgumentException("Invalid state: $value")
+        ItemBoarder(id, state)
     }
-
-    return itemList
+}
+fun List<ItemBoarder>.toMapItemBoardCell(): Map<String, String> {
+    return this.associate { itemBoarder ->
+        itemBoarder.id.toString() to itemBoarder.state.name
+    }
 }

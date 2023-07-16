@@ -7,8 +7,10 @@ import com.pancake.tictactoe.data.remote.FirebaseFireStoreService.Companion.gene
 import com.pancake.tictactoe.data.remote.exceptions.SessionCreationException
 import com.pancake.tictactoe.data.remote.exceptions.SessionJoiningException
 import com.pancake.tictactoe.data.remote.exceptions.SessionRetrievingException
+import com.pancake.tictactoe.data.remote.models.GameDto
 import com.pancake.tictactoe.data.remote.models.PlayerSession
 import com.pancake.tictactoe.data.remote.models.Session
+import com.pancake.tictactoe.data.remote.utill.toMap
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -80,6 +82,11 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
     override suspend fun getGameDocumentReference(sessionId: String): DocumentReference {
         return collection.document(sessionId)
     }
+
+    override suspend fun updateGame(game: GameDto) {
+        collection.document(game.sessionId!!).update(toMap(game))
+    }
+
 
     private companion object {
         const val ROOT_COLLECTION_PATH = "Session"

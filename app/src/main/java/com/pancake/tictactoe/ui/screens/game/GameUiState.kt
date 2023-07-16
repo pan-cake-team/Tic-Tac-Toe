@@ -1,7 +1,7 @@
 package com.pancake.tictactoe.ui.screens.game
 
 data class GameUiState(
-    val sessionId: String = "",
+    val sessionId: String = "165dccc522ae",
     var idOwnerGame: String = "Ahmed12345",
     val counter: Int = 0,
     val gameStatus: GameStatus = GameStatus.NOT_FINISH,
