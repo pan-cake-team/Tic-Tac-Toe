@@ -2,13 +2,11 @@ package com.pancake.tictactoe.data.remote
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService.Companion.generateRandomId
 import com.pancake.tictactoe.data.remote.exceptions.SessionCreationException
 import com.pancake.tictactoe.data.remote.exceptions.SessionJoiningException
 import com.pancake.tictactoe.data.remote.response.GameDto
 import com.pancake.tictactoe.data.remote.response.PlayerDto
-//import com.pancake.tictactoe.data.remote.models.Session
 import com.pancake.tictactoe.data.remote.utill.toMap
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -62,46 +60,20 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         )
     }
 
-
-//    @Throws(SessionRetrievingException::class)
-//    override suspend fun getSession(id: String): Session {
-//        return suspendCoroutine { continuation ->
-//            val sessionRef = collection.document(id)
-//            sessionRef.get().addOnSuccessListener { document ->
-//                runCatching { continuation.resume(document.toObject()!!) }
-//                    .onFailure { exception ->
-//                        val errorMessage = exception.message ?: SESSION_NOT_FOUND
-//                        continuation.resumeWithException(SessionRetrievingException(message = errorMessage))
-//                    }
-//            }
-//                .addOnFailureListener { exception ->
-//                    val errorMessage = exception.message ?: SESSION_RETRIEVING_FAILED
-//                    continuation.resumeWithException(SessionRetrievingException(message = errorMessage))
-//                }
-//        }
-//    }
-
-    fun <T : Any> T.toMap(): Map<String, Any?> {
-        return javaClass.declaredFields.associate { field ->
-            field.isAccessible = true
-            field.name to field.get(this)
-        }
-    }
-
     @Throws(SessionJoiningException::class)
-    override suspend fun joinSession(id: String, playerName: String): Boolean {
-//        val session = getSession(id = id)
-//        val player = {
-//            "playerTwo" to PlayerSessionDto(
-//                name = playerName,
-//                action = CIRCLE,
-//                isRoundPlayer = false,
-//            ).toMap()
-//        }
+    override suspend fun joinSession(sessionId: String, playerName: String): Boolean {
+
+        val player = PlayerDto(
+            id = generateRandomId(),
+            name = playerName,
+            action = CIRCLE,
+            isRoundPlayer = false,
+        ).toMap()
+
 
         return suspendCoroutine { continuation ->
-            val sessionRef = collection.document(id)
-            sessionRef.set("player", SetOptions.merge())
+            val sessionRef = collection.document(sessionId)
+            sessionRef.update(PLAYER_TOW, player)
                 .addOnSuccessListener {
                     continuation.resume(true)
                 }
@@ -117,7 +89,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun updateGame(game: GameDto) {
-        collection.document(game.sessionId!!).update(toMap(game))
+        collection.document(game.sessionId!!).update(game.toMap())
     }
 
 
@@ -128,6 +100,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         const val SESSION_JOINING_FAILED = "Session Joining failed!"
         const val SESSION_CREATION_FAILED = "Session creation failed!"
         const val SESSION_RETRIEVING_FAILED = "Session retrieving failed!"
+        const val PLAYER_TOW = "playerTwo"
         const val CIRCLE = "CIRCLE"
         const val CROSS = "CROSS"
         const val EMPTY = "EMPTY"
