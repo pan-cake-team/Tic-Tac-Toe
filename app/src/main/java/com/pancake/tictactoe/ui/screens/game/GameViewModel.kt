@@ -62,7 +62,7 @@ class GameViewModel @Inject constructor(
         val updatedBoardState = _state.value.boarder.toMutableList().apply {
             this[index] = this[index].copy(
                 state = getUserAction(),
-               // isActive = !this[index].isActive
+                isActive = !this[index].isActive
             )
         }
 
@@ -224,7 +224,7 @@ class GameViewModel @Inject constructor(
             for (i in this.indices) {
                 if (this[i].state == ItemBoardState.EMPTY) {
                     this[i] = this[i].copy(
-                       // isActive = isTurn
+                        isActive = isTurn
                     )
                 }
             }
