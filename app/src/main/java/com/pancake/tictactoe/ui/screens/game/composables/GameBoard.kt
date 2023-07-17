@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+//import androidx.compose.foundation.lazy.GridCells
+//import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +34,7 @@ fun GameBoard(
     onClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3)
+        columns = GridCells.Fixed(3)
     ) {
         items(count = state.boarder.size) { index ->
             val itemBoardState = state.boarder[index]
