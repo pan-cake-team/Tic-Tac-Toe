@@ -31,11 +31,9 @@ class GameViewModel @Inject constructor(
     private fun getGameData() {
         viewModelScope.launch {
             gameUseCase("165dccc522ae").collect { data ->
-
                 onGetDataSuccess(data)
+                preventPlayerIfNotTurn(true)
             }
-
-
         }
     }
 
@@ -58,6 +56,7 @@ class GameViewModel @Inject constructor(
         val updatedBoardState = _state.value.boarder.toMutableList().apply {
             this[index] = this[index].copy(
                 state = getUserAction(),
+                isActive = !this[index].isActive
             )
         }
 
@@ -74,6 +73,7 @@ class GameViewModel @Inject constructor(
         updateScore(gameStatus)
         updateRoundPlayer()
         updateGameData()
+        preventPlayerIfNotTurn(false)
     }
 
     private fun updateRoundPlayer() {
@@ -206,11 +206,23 @@ class GameViewModel @Inject constructor(
         _state.update { it.copy(dialogState = false) }
     }
 
-
     private fun updateGameData() {
         viewModelScope.launch {
             pushUpdateGame(_state.value.toGame())
         }
+    }
+
+    private fun preventPlayerIfNotTurn(isTurn: Boolean) {
+        val itemBoardList = _state.value.boarder.toMutableList().apply {
+            for (i in this.indices) {
+                if (this[i].state == ItemBoardState.EMPTY) {
+                    this[i] = this[i].copy(
+                        isActive = isTurn
+                    )
+                }
+            }
+        }
+        _state.update { it.copy(boarder = itemBoardList) }
     }
 
 }
