@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.data.remote.models
+package com.pancake.tictactoe.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
@@ -9,11 +9,11 @@ data class GameDto(
     @SerializedName("idOwnerGame")
     var idOwnerGame: String?,
     @SerializedName("counter")
-    val counter: Int?,
+    val counter: Int = 0,
     @SerializedName("gameStatus")
-    val gameStatus: String?,
+    val gameStatus: String = "NOT_FINISH",
     @SerializedName("dialogState")
-    val dialogState: Boolean?,
+    val dialogState: Boolean = true,
     @SerializedName("playerOne")
     val playerOne: PlayerDto?,
     @SerializedName("playerTwo")

@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.data.remote.models
+package com.pancake.tictactoe.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
@@ -12,5 +12,5 @@ data class PlayerDto(
     @SerializedName("isRoundPlayer")
     var isRoundPlayer: Boolean?,
     @SerializedName("score")
-    val score: Int?,
+    val score: Int? = 0,
 )
