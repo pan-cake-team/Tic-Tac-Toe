@@ -1,43 +1,19 @@
 package com.pancake.tictactoe.ui.screens.game
 
 data class GameUiState(
-    val sessionId: String = "165dccc522ae",
-    var idOwnerGame: String = "Ahmed12345",
+    val sessionId: String = "",
+    var idOwnerGame: String = "",
     val counter: Int = 0,
     val gameStatus: GameStatus = GameStatus.NOT_FINISH,
     val dialogState: Boolean = true,
-
-    val playerOne: PlayerUiState = PlayerUiState(
-        id = "Ameer12345",
-        name = "Ameer",
-        isRoundPlayer = true,
-        action = ItemBoardState.CROSS,
-        score = 0,
-    ),
-    val playerTwo: PlayerUiState = PlayerUiState(
-        id = "Ahmed12345",
-        name = "Ahmed",
-        isRoundPlayer = false,
-        action = ItemBoardState.CIRCLE,
-        score = 0,
-    ),
-    val boarder: List<ItemBoarderUiSate> = listOf(
-        ItemBoarderUiSate(id = 1),
-        ItemBoarderUiSate(id = 2),
-        ItemBoarderUiSate(id = 3),
-
-        ItemBoarderUiSate(id = 4),
-        ItemBoarderUiSate(id = 5),
-        ItemBoarderUiSate(id = 6),
-
-        ItemBoarderUiSate(id = 7),
-        ItemBoarderUiSate(id = 8),
-        ItemBoarderUiSate(id = 9),
-    ),
-
-    ) {
+    val playerOne: PlayerUiState = PlayerUiState(),
+    val playerTwo: PlayerUiState = PlayerUiState(),
+    val boarder: List<ItemBoarderUiSate> = emptyList(),
+) {
     fun isGameFinished(): Boolean {
-        return gameStatus == GameStatus.PLAYER_TWO_WIN || gameStatus == GameStatus.PLAYER_ONE_WIN || gameStatus == GameStatus.DRAW
+        return gameStatus == GameStatus.PLAYER_TWO_WIN
+                || gameStatus == GameStatus.PLAYER_ONE_WIN
+                || gameStatus == GameStatus.DRAW
     }
 
 }
