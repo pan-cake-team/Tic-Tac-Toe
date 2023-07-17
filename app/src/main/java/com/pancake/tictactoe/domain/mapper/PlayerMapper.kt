@@ -9,7 +9,7 @@ fun PlayerDto.toPlayer(): Player {
         id = id ?: "",
         name = name ?: "",
         action = ItemBoardState.toState(action ?: "EMPTY")!!,
-        isRoundPlayer = isRoundPlayer ?: false,
+        isRoundPlayer = roundPlayer ?: false,
         score = score ?: 0,
     )
 }
@@ -19,7 +19,7 @@ fun Player.toPlayerDto(): PlayerDto {
         id = id,
         name = name,
         action = action.name,
-        isRoundPlayer = isRoundPlayer,
+        roundPlayer = isRoundPlayer,
         score = score,
     )
 }

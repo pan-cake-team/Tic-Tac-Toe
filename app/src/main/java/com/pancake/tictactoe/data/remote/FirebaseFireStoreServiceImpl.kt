@@ -52,7 +52,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
             playerOne = PlayerDto(
                 id = idPlayerOne,
                 name = namePlayer,
-                isRoundPlayer = true,
+                roundPlayer = true,
                 action = CROSS
             ),
             playerTwo = null,
@@ -67,7 +67,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
             id = generateRandomId(),
             name = playerName,
             action = CIRCLE,
-            isRoundPlayer = false,
+            roundPlayer = false,
         ).toMap()
 
 

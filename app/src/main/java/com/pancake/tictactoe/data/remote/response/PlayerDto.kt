@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class PlayerDto(
     @SerializedName("id")
-    var id: String?,
+    val id: String?,
     @SerializedName("action")
-    var action: String?,
+    val action: String?,
     @SerializedName("name")
     val name: String?,
-    @SerializedName("isRoundPlayer")
-    var isRoundPlayer: Boolean?,
+    @SerializedName("roundPlayer")
+    val roundPlayer: Boolean?,
     @SerializedName("score")
     val score: Int? = 0,
 )
