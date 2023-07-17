@@ -2,7 +2,7 @@ package com.pancake.tictactoe.domain.usecase
 
 import com.google.gson.Gson
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService
-import com.pancake.tictactoe.data.remote.models.GameDto
+import com.pancake.tictactoe.data.remote.response.GameDto
 import com.pancake.tictactoe.domain.mapper.toGame
 import com.pancake.tictactoe.domain.model.Game
 import kotlinx.coroutines.channels.awaitClose

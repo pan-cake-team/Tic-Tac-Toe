@@ -1,6 +1,6 @@
 package com.pancake.tictactoe.domain.mapper
 
-import com.pancake.tictactoe.data.remote.models.GameDto
+import com.pancake.tictactoe.data.remote.response.GameDto
 import com.pancake.tictactoe.domain.model.Game
 import com.pancake.tictactoe.domain.model.Player
 import com.pancake.tictactoe.ui.screens.game.GameStatus
