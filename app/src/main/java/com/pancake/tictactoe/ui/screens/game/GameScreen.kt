@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
@@ -38,6 +39,7 @@ import com.pancake.tictactoe.ui.theme.textPrimary
 
 @Composable
 fun GameScreen(
+    navController: NavController,
     viewModel: GameViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()

@@ -7,10 +7,10 @@ import com.pancake.tictactoe.ui.navigation.MainNavigationGraph
 import com.pancake.tictactoe.ui.screens.join.JoinScreen
 
 
-const val ROUTE = MainNavigationGraph.JOIN_SCREEN
+private const val ROUTE = MainNavigationGraph.JOIN_SCREEN
 
 fun NavController.navigateToGameScreen() {
-    navigate("$ROUTE/")
+    navigate(ROUTE)
 }
 
 fun NavGraphBuilder.joinRoute(navController: NavController) {

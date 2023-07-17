@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +19,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.pancake.tictactoe.R
+import com.pancake.tictactoe.ui.screens.game.composables.JoinGameDialog
+import com.pancake.tictactoe.ui.screens.game.navigateToGameScreen
 import com.pancake.tictactoe.ui.screens.join.composable.FullColorButton
 import com.pancake.tictactoe.ui.screens.join.composable.GameOutlineButton
 import com.pancake.tictactoe.ui.theme.TextTertiary
@@ -28,7 +31,6 @@ import com.pancake.tictactoe.ui.theme.space24
 import com.pancake.tictactoe.ui.theme.space72
 import com.pancake.tictactoe.ui.theme.space8
 
-//@Preview(backgroundColor = 0xFFEBEAEA)
 @Composable
 fun JoinScreen(
     navController: NavController,
@@ -41,8 +43,16 @@ fun JoinScreen(
         state = state,
         onCreateGameClicked = viewModel::showCreateGameDialog,
         onJoinGameClicked = viewModel::showJoinGameDialog,
-        onCreateSession = {name ->},
-        onJoinToSession = {name, gameId ->}
+        onCreateSession = { name -> },
+        onJoinToSession = viewModel::joinToGameSession,
+        onChangeName = viewModel::onChangeName,
+        onChangeGameId = viewModel::onChangeGameId,
+        navToGameScreen = { name, gameId ->
+            navController.navigateToGameScreen(
+                name = name,
+                gameId = gameId
+            )
+        }
     )
 }
 
@@ -52,7 +62,10 @@ private fun JoinContent(
     onCreateGameClicked: () -> Unit,
     onJoinGameClicked: () -> Unit,
     onCreateSession: (name: String) -> Unit,
-    onJoinToSession: (name: String, gameId: String) -> Unit
+    onJoinToSession: () -> Unit,
+    onChangeName: (String) -> Unit,
+    onChangeGameId: (String) -> Unit,
+    navToGameScreen: (name: String, gameId: String) -> Unit,
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -137,5 +150,25 @@ private fun JoinContent(
             })
 
 
+    }
+
+    if (state.isJoinGameDialogVisible)
+        JoinGameDialog(
+            name = state.name,
+            gameId = state.gameId,
+            onChangeGameId = onChangeGameId,
+            onChangeName = onChangeName,
+            onClickDone = onJoinToSession,
+            setShowDialog = {
+
+            })
+
+    LaunchedEffect(state.isJoinSuccess) {
+        if (state.isJoinSuccess) {
+            navToGameScreen(
+                state.name,
+                state.gameId
+            )
+        }
     }
 }

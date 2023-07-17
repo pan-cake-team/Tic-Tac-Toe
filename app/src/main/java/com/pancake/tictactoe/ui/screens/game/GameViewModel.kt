@@ -1,5 +1,6 @@
 package com.pancake.tictactoe.ui.screens.game
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pancake.tictactoe.domain.model.Game
@@ -19,10 +20,12 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     private val gameUseCase: UpdateGameUseCase,
     private val pushUpdateGame: PushUpdateGameUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _state = MutableStateFlow(GameUiState())
     val state = _state.asStateFlow()
 
+    private val args: GameArgs = GameArgs(savedStateHandle)
     init {
 
         getGameData()
@@ -30,7 +33,7 @@ class GameViewModel @Inject constructor(
 
     private fun getGameData() {
         viewModelScope.launch {
-            gameUseCase("165dccc522ae").collect { data ->
+            gameUseCase(args.gameId!!).collect { data ->
 
                 onGetDataSuccess(data)
             }
