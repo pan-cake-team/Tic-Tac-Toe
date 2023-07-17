@@ -35,7 +35,7 @@ data class GameUiState(
         ItemBoarderUiSate(id = 9),
     ),
 
-) {
+    ) {
     fun isGameFinished(): Boolean {
         return gameStatus == GameStatus.PLAYER_TWO_WIN || gameStatus == GameStatus.PLAYER_ONE_WIN || gameStatus == GameStatus.DRAW
     }
@@ -46,9 +46,8 @@ data class GameUiState(
 data class ItemBoarderUiSate(
     var id: Int = 0,
     var state: ItemBoardState = ItemBoardState.EMPTY,
-) {
-    fun isActiveItemBoarderCell() = state == ItemBoardState.EMPTY
-}
+    var isActive: Boolean = true,
+)
 
 data class PlayerUiState(
     var id: String = "",

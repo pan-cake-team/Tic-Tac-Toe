@@ -43,10 +43,12 @@ fun GameBoard(
                     if (state.playerOne.action == itemBoardState.state)
                         Brand else backGround
                 }
+
                 GameStatus.PLAYER_TWO_WIN -> {
                     if (state.playerTwo.action == itemBoardState.state)
                         Brand else backGround
                 }
+
                 else -> backGround
             }
             GameBoardItem(
@@ -72,8 +74,7 @@ fun GameBoardItem(
             .border(width = 1.dp, color = Gray)
             .clickable(
                 onClick = onClick,
-                enabled = if (isGameFinished) false
-                else state.isActiveItemBoarderCell()
+                enabled = if (isGameFinished) false else state.isActive
             )
             .padding(26.dp),
     ) {
