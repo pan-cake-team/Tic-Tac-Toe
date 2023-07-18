@@ -18,15 +18,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
 import com.pancake.tictactoe.ui.screens.game.composables.PlayerInfo
 import com.pancake.tictactoe.ui.screens.game.composables.ResultDialog
 import com.pancake.tictactoe.ui.screens.game.composables.VerticalSpacer
+import com.pancake.tictactoe.ui.screens.game.composables.gameStatusSubTitle
+import com.pancake.tictactoe.ui.screens.game.composables.gameStatusTitle
 import com.pancake.tictactoe.ui.theme.Brand
 import com.pancake.tictactoe.ui.theme.backGround
 import com.pancake.tictactoe.ui.theme.border1
@@ -45,6 +45,7 @@ fun GameScreen(
     val state by viewModel.state.collectAsState()
     GameContent(
         state = state,
+        playerName = viewModel.playerName!!,
         onClickGameBoard = viewModel::onClickGameBoard,
         onDismissDialog = viewModel::onClickDismissDialog,
         onClickPlayAgain = viewModel::onClickPlayAgain
@@ -54,6 +55,7 @@ fun GameScreen(
 @Composable
 private fun GameContent(
     state: GameUiState,
+    playerName: String,
     onClickGameBoard: (Int) -> Unit,
     onDismissDialog: () -> Unit,
     onClickPlayAgain: () -> Unit
@@ -69,8 +71,8 @@ private fun GameContent(
         Spacer(modifier = Modifier.weight(1f))
         if (state.isGameFinished()) {
             if (state.dialogState)
-                ResultDialog(state, onDismiss = onDismissDialog)
-            VictoryStatus(isWin = true)
+                ResultDialog(state, playerName, onDismiss = onDismissDialog)
+            VictoryStatus(state, playerName)
             Spacer(modifier = Modifier.weight(1f))
         }
         PlayerInfo(state)
@@ -115,15 +117,15 @@ fun ScoreText(text: String) {
 }
 
 @Composable
-fun VictoryStatus(isWin: Boolean) {
+fun VictoryStatus(state: GameUiState, playerName: String) {
     Text(
-        text = if (isWin) stringResource(R.string.you_win) else stringResource(R.string.you_lose),
+        text = gameStatusTitle(state, playerName),
         style = mainTypography.headlineLarge,
         color = textPrimary
     )
     VerticalSpacer(height = space8)
     Text(
-        text = if (isWin) stringResource(R.string.win_message) else stringResource(R.string.lose_message),
+        text = gameStatusSubTitle(state, playerName),
         style = mainTypography.labelSmall,
         color = textPrimary
     )
