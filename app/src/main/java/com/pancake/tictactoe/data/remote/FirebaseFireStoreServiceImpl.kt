@@ -37,8 +37,8 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
                 .addOnSuccessListener {
                     continuation.resume(sessionId)
                 }
-                .addOnFailureListener { exception ->
-                    val errorMessage = exception.message ?: SESSION_CREATION_FAILED
+                .addOnFailureListener {
+                    val errorMessage = SESSION_CREATION_FAILED
                     continuation.resumeWithException(SessionCreationException(message = errorMessage))
                 }
         }
@@ -64,7 +64,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
     }
 
     @Throws(SessionJoiningException::class)
-    override suspend fun joinSession(sessionId: String, playerName: String): Boolean {
+    override suspend fun joinSession(id: String, playerName: String): Boolean {
         val randomId = generateRandomId()
         SharedPrefManager.playerId = randomId
 
@@ -77,7 +77,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
 
         return suspendCoroutine { continuation ->
-            val sessionRef = collection.document(sessionId)
+            val sessionRef = collection.document(id)
             sessionRef.update(PLAYER_TOW, player)
                 .addOnSuccessListener {
                     continuation.resume(true)
@@ -100,11 +100,8 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     private companion object {
         const val ROOT_COLLECTION_PATH = "Session"
-        const val JOIN_PLAYER_PATH = "players"
-        const val SESSION_NOT_FOUND = "Session Not Found!"
         const val SESSION_JOINING_FAILED = "Session Joining failed!"
         const val SESSION_CREATION_FAILED = "Session creation failed!"
-        const val SESSION_RETRIEVING_FAILED = "Session retrieving failed!"
         const val PLAYER_TOW = "playerTwo"
         const val CIRCLE = "CIRCLE"
         const val CROSS = "CROSS"
