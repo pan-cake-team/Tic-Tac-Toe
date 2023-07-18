@@ -2,6 +2,7 @@ package com.pancake.tictactoe.ui.screens.game
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,7 +49,8 @@ fun GameScreen(
         playerName = viewModel.playerName!!,
         onClickGameBoard = viewModel::onClickGameBoard,
         onDismissDialog = viewModel::onClickDismissDialog,
-        onClickPlayAgain = viewModel::onClickPlayAgain
+        onClickPlayAgain = viewModel::onClickPlayAgain,
+        onClickBack = {}
     )
 }
 
@@ -58,7 +60,8 @@ private fun GameContent(
     playerName: String,
     onClickGameBoard: (Int) -> Unit,
     onDismissDialog: () -> Unit,
-    onClickPlayAgain: () -> Unit
+    onClickPlayAgain: () -> Unit,
+    onClickBack: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -67,7 +70,7 @@ private fun GameContent(
             .padding(start = space16, end = space16, top = space16, bottom = space24),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopBar()
+        TopBar(onClick = onClickBack)
         Spacer(modifier = Modifier.weight(1f))
         if (state.isGameFinished()) {
             if (state.dialogState)
@@ -87,11 +90,12 @@ private fun GameContent(
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(onClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         Icon(
+            modifier = Modifier.clickable(onClick = onClick),
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "back",
             tint = Brand
