@@ -2,6 +2,7 @@ package com.pancake.tictactoe.data.remote
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.pancake.tictactoe.data.localStorage.SharedPrefManager
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService.Companion.generateRandomId
 import com.pancake.tictactoe.data.remote.exceptions.SessionCreationException
 import com.pancake.tictactoe.data.remote.exceptions.SessionJoiningException
@@ -20,6 +21,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     @Throws(SessionCreationException::class)
     override suspend fun createSession(playerName: String): String {
+        SharedPrefManager.playerName = playerName
         return suspendCoroutine { continuation ->
             val sessionId = generateRandomId()
             val sessionRef = collection.document(sessionId)
@@ -62,6 +64,7 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     @Throws(SessionJoiningException::class)
     override suspend fun joinSession(sessionId: String, playerName: String): Boolean {
+        SharedPrefManager.playerName = playerName
 
         val player = PlayerDto(
             id = generateRandomId(),
