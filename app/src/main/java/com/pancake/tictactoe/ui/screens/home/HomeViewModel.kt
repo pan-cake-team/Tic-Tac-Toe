@@ -9,9 +9,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class JoinViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val firebaseFire: FirebaseFireStoreService
-) : BaseViewModel<JoinUiState>(JoinUiState()) {
+) : BaseViewModel<HomeUiState>(HomeUiState()) {
 
 
     fun showCreateGameDialog() {
@@ -40,7 +40,7 @@ class JoinViewModel @Inject constructor(
 
     fun onChangeName(name: String) {
         _state.update { state ->
-            state.copy(PlayerName = name)
+            state.copy(playerName = name)
         }
     }
 
@@ -55,7 +55,7 @@ class JoinViewModel @Inject constructor(
             state.copy(isCreateGameDialogVisible = false)
         }
         viewModelScope.launch {
-            firebaseFire.createSession(state.value.PlayerName)
+            firebaseFire.createSession(state.value.playerName)
         }
     }
 
@@ -66,7 +66,7 @@ class JoinViewModel @Inject constructor(
         viewModelScope.launch {
             val isJoinSuccess = firebaseFire.joinSession(
                 state.value.gameId,
-                state.value.PlayerName
+                state.value.playerName
             )
             _state.update {
                 it.copy(

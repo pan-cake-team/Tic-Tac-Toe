@@ -30,13 +30,13 @@ import androidx.compose.ui.window.Dialog
 import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.SpacerVertical16
 import com.pancake.tictactoe.ui.screens.game.composables.SpacerVertical24
-import com.pancake.tictactoe.ui.screens.home.JoinUiState
+import com.pancake.tictactoe.ui.screens.home.HomeUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateGameDialog(
-    state:JoinUiState,
+    state:HomeUiState,
     onDismiss: () -> Unit,
     onChangeName: (String) -> Unit,
     onClickDone: () -> Unit,
@@ -75,7 +75,7 @@ fun CreateGameDialog(
                         ),
 
                         placeholder = { Text(text = stringResource(id = R.string.name)) },
-                        value = state.PlayerName,
+                        value = state.playerName,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = onChangeName,
                     )

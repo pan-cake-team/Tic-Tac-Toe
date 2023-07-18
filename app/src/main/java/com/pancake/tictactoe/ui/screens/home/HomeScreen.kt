@@ -19,11 +19,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.pancake.tictactoe.R
-import com.pancake.tictactoe.ui.screens.home.composable.JoinGameDialog
 import com.pancake.tictactoe.ui.screens.game.navigateToGameScreen
 import com.pancake.tictactoe.ui.screens.home.composable.ButtonCreateGame
-import com.pancake.tictactoe.ui.screens.home.composable.CreateGameDialog
 import com.pancake.tictactoe.ui.screens.home.composable.ButtonJoinGame
+import com.pancake.tictactoe.ui.screens.home.composable.CreateGameDialog
+import com.pancake.tictactoe.ui.screens.home.composable.JoinGameDialog
 import com.pancake.tictactoe.ui.theme.TextTertiary
 import com.pancake.tictactoe.ui.theme.mainTypography
 import com.pancake.tictactoe.ui.theme.onPrimary
@@ -35,8 +35,8 @@ import com.pancake.tictactoe.ui.theme.space8
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: JoinViewModel = hiltViewModel()
-    ) {
+    viewModel: HomeViewModel = hiltViewModel()
+) {
 
     val state by viewModel.state.collectAsState()
 
@@ -52,7 +52,6 @@ fun HomeScreen(
         onChangeGameId = viewModel::onChangeGameId,
         navToGameScreen = { name, gameId ->
             navController.navigateToGameScreen(
-                name = name,
                 gameId = gameId
             )
         }
@@ -61,11 +60,11 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    state: JoinUiState,
+    state: HomeUiState,
     onCreateGameClicked: () -> Unit,
-    onDismissCreateDialog:()->Unit,
+    onDismissCreateDialog: () -> Unit,
     onJoinGameClicked: () -> Unit,
-    onDismissJoinDialog:()->Unit,
+    onDismissJoinDialog: () -> Unit,
     onCreateSession: () -> Unit,
     onJoinToSession: () -> Unit,
     onChangeName: (String) -> Unit,
@@ -177,7 +176,7 @@ private fun HomeContent(
     LaunchedEffect(state.isJoinSuccess) {
         if (state.isJoinSuccess) {
             navToGameScreen(
-                state.PlayerName,
+                state.playerName,
                 state.gameId
             )
         }
