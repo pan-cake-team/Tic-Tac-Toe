@@ -26,7 +26,7 @@ fun NavGraphBuilder.gameScreen(navController: NavHostController) {
 
 
 class GameArgs(savedStateHandle: SavedStateHandle) {
-    val gameId: String? = savedStateHandle[GAME_ID]
+    val gameId: String = checkNotNull(savedStateHandle[GAME_ID])
 
     companion object {
         const val GAME_ID = "gameId"

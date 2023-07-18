@@ -36,7 +36,7 @@ class GameViewModel @Inject constructor(
 
     private fun getGameData() {
         viewModelScope.launch {
-            gameUseCase(args.gameId!!).collect { data ->
+            gameUseCase(args.gameId).collect { data ->
 
                 onGetDataSuccess(data)
             }
