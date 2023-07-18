@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.ui.screens.join
+package com.pancake.tictactoe.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,11 +19,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.pancake.tictactoe.R
-import com.pancake.tictactoe.ui.screens.join.composable.JoinGameDialog
+import com.pancake.tictactoe.ui.screens.home.composable.JoinGameDialog
 import com.pancake.tictactoe.ui.screens.game.navigateToGameScreen
-import com.pancake.tictactoe.ui.screens.join.composable.ButtonCreateGame
-import com.pancake.tictactoe.ui.screens.join.composable.CreateGameDialog
-import com.pancake.tictactoe.ui.screens.join.composable.ButtonJoinGame
+import com.pancake.tictactoe.ui.screens.home.composable.ButtonCreateGame
+import com.pancake.tictactoe.ui.screens.home.composable.CreateGameDialog
+import com.pancake.tictactoe.ui.screens.home.composable.ButtonJoinGame
 import com.pancake.tictactoe.ui.theme.TextTertiary
 import com.pancake.tictactoe.ui.theme.mainTypography
 import com.pancake.tictactoe.ui.theme.onPrimary
@@ -33,14 +33,14 @@ import com.pancake.tictactoe.ui.theme.space72
 import com.pancake.tictactoe.ui.theme.space8
 
 @Composable
-fun JoinScreen(
+fun HomeScreen(
     navController: NavController,
     viewModel: JoinViewModel = hiltViewModel()
     ) {
 
     val state by viewModel.state.collectAsState()
 
-    JoinContent(
+    HomeContent(
         state = state,
         onCreateGameClicked = viewModel::showCreateGameDialog,
         onDismissCreateDialog = viewModel::hideCreateGameDialog,
@@ -60,7 +60,7 @@ fun JoinScreen(
 }
 
 @Composable
-private fun JoinContent(
+private fun HomeContent(
     state: JoinUiState,
     onCreateGameClicked: () -> Unit,
     onDismissCreateDialog:()->Unit,

@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.ui.screens.join
+package com.pancake.tictactoe.ui.screens.home
 
 import androidx.lifecycle.viewModelScope
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService

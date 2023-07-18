@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.ui.screens.join.composable
+package com.pancake.tictactoe.ui.screens.home.composable
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.height

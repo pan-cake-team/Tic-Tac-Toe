@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.ui.screens.join.composable
+package com.pancake.tictactoe.ui.screens.home.composable
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape

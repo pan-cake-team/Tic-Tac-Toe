@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.ui.screens.join
+package com.pancake.tictactoe.ui.screens.home
 
 import com.pancake.tictactoe.ui.base.BaseUiState
 
