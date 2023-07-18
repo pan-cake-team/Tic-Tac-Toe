@@ -3,6 +3,7 @@ package com.pancake.tictactoe.ui.screens.game
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pancake.tictactoe.data.localStorage.SharedPrefManager
 import com.pancake.tictactoe.domain.model.Game
 import com.pancake.tictactoe.domain.usecase.PushUpdateGameUseCase
 import com.pancake.tictactoe.domain.usecase.UpdateGameUseCase
@@ -26,6 +27,8 @@ class GameViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private val args: GameArgs = GameArgs(savedStateHandle)
+    val playerName = SharedPrefManager.playerName
+
     init {
 
         getGameData()
@@ -58,6 +61,15 @@ class GameViewModel @Inject constructor(
     }
 
     fun onClickGameBoard(index: Int) {
+        val player = _state.value
+        if (player.playerOne.name == playerName && player.playerOne.isRoundPlayer) {
+            updateGameBoard(index)
+        } else if (player.playerTwo.name == playerName && player.playerTwo.isRoundPlayer) {
+            updateGameBoard(index)
+        }
+    }
+
+    private fun updateGameBoard(index: Int) {
         val updatedBoardState = _state.value.boarder.toMutableList().apply {
             this[index] = this[index].copy(
                 state = getUserAction(),
@@ -208,7 +220,6 @@ class GameViewModel @Inject constructor(
     fun onClickDismissDialog() {
         _state.update { it.copy(dialogState = false) }
     }
-
 
     private fun updateGameData() {
         viewModelScope.launch {
