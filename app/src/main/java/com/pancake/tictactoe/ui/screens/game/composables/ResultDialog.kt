@@ -34,34 +34,7 @@ import com.pancake.tictactoe.ui.theme.textSize16
 
 
 @Composable
-fun ResultDialog(state: GameUiState, onDismiss: () -> Unit) {
-    val isRound = !state.playerOne.isRoundPlayer
-
-    val playerStatement = when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (isRound) "Congrats ${state.playerOne.name} Win" else "Sorry you lose"
-        GameStatus.PLAYER_TWO_WIN -> if (isRound) "Congrats ${state.playerTwo.name} Win" else "Sorry you lose"
-        GameStatus.DRAW -> "Victory Draw"
-        else -> ""
-    }
-    val color = when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (isRound) Color(0xFFFFE437) else Color(0xFFFF3434)
-        GameStatus.PLAYER_TWO_WIN -> if (isRound) Color(0xFFFFE437) else Color(0xFFFF3434)
-        GameStatus.DRAW -> Color(0xFF000000)
-        else -> Color.White
-    }
-    val image = when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (isRound) painterResource(R.drawable.image_winer) else painterResource(
-            R.drawable.image_lose
-        )
-
-        GameStatus.PLAYER_TWO_WIN -> if (isRound) painterResource(R.drawable.image_winer) else painterResource(
-            R.drawable.image_lose
-        )
-
-        GameStatus.DRAW -> painterResource(R.drawable.image_draw)
-        else -> painterResource(R.drawable.image_draw)
-    }
-
+fun ResultDialog(state: GameUiState, playerName: String, onDismiss: () -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
         Box(
             Modifier
@@ -75,20 +48,24 @@ fun ResultDialog(state: GameUiState, onDismiss: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = playerStatement,
+                    text = getDialogTitle(state, playerName),
                     fontSize = textSize16,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = FontFamily(Font(R.font.noto_serif)),
-                    color = color,
+                    color = getDialogColor(state, playerName),
                     textAlign = TextAlign.Center
                 )
                 VerticalSpacer(height = space24)
-                Image(modifier = Modifier.size(150.dp), painter = image, contentDescription = "")
+                Image(
+                    modifier = Modifier.size(150.dp),
+                    painter = painterResource(getDialogImage(state, playerName)),
+                    contentDescription = ""
+                )
                 VerticalSpacer(height = space16)
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(space24),
-                    colors = ButtonDefaults.buttonColors(color),
+                    colors = ButtonDefaults.buttonColors(getDialogColor(state, playerName)),
                     onClick = onDismiss,
                 ) {
                     Text(
@@ -100,5 +77,41 @@ fun ResultDialog(state: GameUiState, onDismiss: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+fun getDialogTitle(state: GameUiState, playerName: String): String {
+    return when (state.gameStatus) {
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) "Congrats ${state.playerOne.name} Win" else "Sorry you lose"
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) "Congrats ${state.playerTwo.name} Win" else "Sorry you lose"
+        GameStatus.DRAW -> "Victory Draw"
+        else -> ""
+    }
+}
+
+fun getDialogColor(state: GameUiState, playerName: String): Color {
+    return when (state.gameStatus) {
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) Color(0xFFFFE437) else Color(
+            0xFFFF3434
+        )
+
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) Color(0xFFFFE437) else Color(
+            0xFFFF3434
+        )
+
+        GameStatus.DRAW -> Color(0xFF000000)
+        else -> Color.White
+    }
+}
+
+fun getDialogImage(state: GameUiState, playerName: String): Int {
+    return when (state.gameStatus) {
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) R.drawable.image_winer else R.drawable.image_lose
+
+
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) R.drawable.image_winer else R.drawable.image_lose
+
+        GameStatus.DRAW -> R.drawable.image_draw
+        else -> R.drawable.image_draw
     }
 }
