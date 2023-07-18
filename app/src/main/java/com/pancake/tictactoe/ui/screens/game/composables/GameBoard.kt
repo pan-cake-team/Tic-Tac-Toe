@@ -1,8 +1,5 @@
-@file:Suppress("OPT_IN_IS_NOT_ENABLED")
-
 package com.pancake.tictactoe.ui.screens.game.composables
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-//import androidx.compose.foundation.lazy.GridCells
-//import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +22,6 @@ import com.pancake.tictactoe.ui.theme.Gray
 import com.pancake.tictactoe.ui.theme.backGround
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GameBoard(
     state: GameUiState,
@@ -74,7 +68,7 @@ fun GameBoardItem(
             .border(width = 1.dp, color = Gray)
             .clickable(
                 onClick = onClick,
-                enabled = if (isGameFinished) false else state.isActive
+                enabled = if (isGameFinished) false else state.checkItemBoardIfActive()
             )
             .padding(26.dp),
     ) {

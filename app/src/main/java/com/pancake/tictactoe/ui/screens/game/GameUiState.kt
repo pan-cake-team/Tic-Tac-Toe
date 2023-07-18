@@ -22,8 +22,11 @@ data class GameUiState(
 data class ItemBoarderUiSate(
     var id: Int = 0,
     var state: ItemBoardState = ItemBoardState.EMPTY,
-    var isActive: Boolean = true,
-)
+) {
+    fun checkItemBoardIfActive(): Boolean {
+        return state == ItemBoardState.EMPTY
+    }
+}
 
 data class PlayerUiState(
     var id: String = "",
