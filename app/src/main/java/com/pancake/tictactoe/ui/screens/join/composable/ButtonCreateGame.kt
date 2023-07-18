@@ -14,9 +14,9 @@ import com.pancake.tictactoe.ui.theme.onPrimary
 import com.pancake.tictactoe.ui.theme.radius4
 
 @Composable
-fun FullColorButton(modifier: Modifier = Modifier, title: String, onClick: () -> Unit) {
+fun ButtonCreateGame(modifier: Modifier = Modifier, title: String, onClick: () -> Unit) {
     Button(
-        onClick = { onClick() },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(contentColor = onPrimary, containerColor = Brand),
         shape = RoundedCornerShape(radius4),
         modifier = modifier

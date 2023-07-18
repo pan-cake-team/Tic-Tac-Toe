@@ -16,9 +16,9 @@ import com.pancake.tictactoe.ui.theme.onPrimary
 import com.pancake.tictactoe.ui.theme.radius4
 
 @Composable
-fun GameOutlineButton(modifier: Modifier = Modifier, title: String, onClick: () -> Unit) {
+fun ButtonJoinGame(modifier: Modifier = Modifier, title: String, onClick: () -> Unit) {
     OutlinedButton(
-        onClick = {onClick() },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(contentColor = Brand, containerColor = onPrimary),
         border = BorderStroke(width = border1, color = Brand),
         shape = RoundedCornerShape(radius4),
