@@ -8,4 +8,5 @@ data class HomeUiState(
     val isCreateGameDialogVisible: Boolean = false,
     val isJoinGameDialogVisible: Boolean = false,
     val isJoinSuccess: Boolean = false,
+    val isCreateSuccess: Boolean = false,
 ) : BaseUiState

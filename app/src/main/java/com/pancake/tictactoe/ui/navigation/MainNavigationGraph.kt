@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.pancake.tictactoe.ui.screens.game.gameScreen
-import com.pancake.tictactoe.ui.screens.home.composable.homeRoute
+import com.pancake.tictactoe.ui.screens.home.homeRoute
 import com.pancake.tictactoe.ui.screens.welcome.welcomeRoute
 
 

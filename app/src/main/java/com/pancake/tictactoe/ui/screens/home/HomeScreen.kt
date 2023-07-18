@@ -50,11 +50,7 @@ fun HomeScreen(
         onJoinToSession = viewModel::joinToGameSession,
         onChangeName = viewModel::onChangeName,
         onChangeGameId = viewModel::onChangeGameId,
-        navToGameScreen = { name, gameId ->
-            navController.navigateToGameScreen(
-                gameId = gameId
-            )
-        }
+        navToGameScreen = { gameId -> navController.navigateToGameScreen(gameId = gameId) }
     )
 }
 
@@ -69,7 +65,7 @@ private fun HomeContent(
     onJoinToSession: () -> Unit,
     onChangeName: (String) -> Unit,
     onChangeGameId: (String) -> Unit,
-    navToGameScreen: (name: String, gameId: String) -> Unit,
+    navToGameScreen: (gameId: String) -> Unit,
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -175,10 +171,13 @@ private fun HomeContent(
 
     LaunchedEffect(state.isJoinSuccess) {
         if (state.isJoinSuccess) {
-            navToGameScreen(
-                state.playerName,
-                state.gameId
-            )
+            navToGameScreen(state.gameId)
+        }
+    }
+
+    LaunchedEffect(state.isCreateSuccess) {
+        if (state.isCreateSuccess) {
+            navToGameScreen(state.gameId)
         }
     }
 }

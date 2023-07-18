@@ -55,7 +55,10 @@ class HomeViewModel @Inject constructor(
             state.copy(isCreateGameDialogVisible = false)
         }
         viewModelScope.launch {
-            firebaseFire.createSession(state.value.playerName)
+            val gameId = firebaseFire.createSession(state.value.playerName)
+            if (gameId != SESSION_CREATION_FAILED) {
+                _state.update { it.copy(isCreateSuccess = true, gameId =gameId ) }
+            }
         }
     }
 
@@ -75,5 +78,9 @@ class HomeViewModel @Inject constructor(
             }
         }
 
+    }
+
+    private companion object {
+        const val SESSION_CREATION_FAILED = "Session creation failed!"
     }
 }
