@@ -11,29 +11,24 @@ import com.pancake.tictactoe.ui.navigation.MainNavigationGraph
 
 private const val ROUTE = MainNavigationGraph.GAME_SCREEN
 
-fun NavController.navigateToGameScreen(name: String, gameId: String) {
-    navigate("$ROUTE/$name/$gameId")
+fun NavController.navigateToGameScreen(gameId: String) {
+    navigate("$ROUTE/$gameId")
 }
 
 fun NavGraphBuilder.gameScreen(navController: NavHostController) {
     composable(
-        "$ROUTE/{${GameArgs.NAME}}/{${GameArgs.GAME_ID}}",
+        "$ROUTE/{${GameArgs.GAME_ID}}",
         arguments = listOf(
-            navArgument(GameArgs.NAME) { NavType.StringType },
             navArgument(GameArgs.GAME_ID) { NavType.StringType }
         )
     ) { GameScreen(navController) }
-
-
 }
 
 
 class GameArgs(savedStateHandle: SavedStateHandle) {
-    val name: String? = savedStateHandle[NAME]
     val gameId: String? = savedStateHandle[GAME_ID]
 
     companion object {
-        const val NAME = "name"
         const val GAME_ID = "gameId"
     }
 }
