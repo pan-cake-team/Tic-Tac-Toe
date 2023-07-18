@@ -21,14 +21,15 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     @Throws(SessionCreationException::class)
     override suspend fun createSession(playerName: String): String {
-        SharedPrefManager.playerName = playerName
+        val randomId = generateRandomId()
+        SharedPrefManager.playerId = randomId
         return suspendCoroutine { continuation ->
             val sessionId = generateRandomId()
             val sessionRef = collection.document(sessionId)
 
             val session = setDefaultGameValue(
                 sessionId = sessionId,
-                idPlayerOne = generateRandomId(),
+                idPlayerOne = randomId,
                 namePlayer = playerName
             )
             sessionRef
@@ -64,10 +65,11 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     @Throws(SessionJoiningException::class)
     override suspend fun joinSession(sessionId: String, playerName: String): Boolean {
-        SharedPrefManager.playerName = playerName
+        val randomId = generateRandomId()
+        SharedPrefManager.playerId = randomId
 
         val player = PlayerDto(
-            id = generateRandomId(),
+            id = randomId,
             name = playerName,
             action = CIRCLE,
             roundPlayer = false,

@@ -8,7 +8,7 @@ object SharedPrefManager {
     private var sharedPreference: SharedPreferences? = null
 
     private const val SHARED_PREFERENCE_Name = "sharedPreference"
-    private const val PLAYER_NAME = "playerName"
+    private const val PLAYER_Id = "playerId"
 
     fun getInit(context: Context): SharedPreferences {
         sharedPreference =
@@ -16,10 +16,10 @@ object SharedPrefManager {
         return sharedPreference!!
     }
 
-    var playerName: String?
-        get() = sharedPreference?.getString(PLAYER_NAME, "")
+    var playerId: String?
+        get() = sharedPreference?.getString(PLAYER_Id, "")
         set(value) {
-            sharedPreference?.edit()?.putString(PLAYER_NAME, value)?.apply()
+            sharedPreference?.edit()?.putString(PLAYER_Id, value)?.apply()
         }
 
 }

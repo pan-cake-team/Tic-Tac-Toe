@@ -46,7 +46,7 @@ fun GameScreen(
     val state by viewModel.state.collectAsState()
     GameContent(
         state = state,
-        playerName = viewModel.playerName!!,
+        playerId = viewModel.playerId!!,
         onClickGameBoard = viewModel::onClickGameBoard,
         onDismissDialog = viewModel::onClickDismissDialog,
         onClickPlayAgain = viewModel::onClickPlayAgain,
@@ -57,7 +57,7 @@ fun GameScreen(
 @Composable
 private fun GameContent(
     state: GameUiState,
-    playerName: String,
+    playerId: String,
     onClickGameBoard: (Int) -> Unit,
     onDismissDialog: () -> Unit,
     onClickPlayAgain: () -> Unit,
@@ -74,8 +74,8 @@ private fun GameContent(
         Spacer(modifier = Modifier.weight(1f))
         if (state.isGameFinished()) {
             if (state.dialogState)
-                ResultDialog(state, playerName, onDismiss = onDismissDialog)
-            VictoryStatus(state, playerName)
+                ResultDialog(state, playerId, onDismiss = onDismissDialog)
+            VictoryStatus(state, playerId)
             Spacer(modifier = Modifier.weight(1f))
         }
         PlayerInfo(state)
@@ -121,15 +121,15 @@ fun ScoreText(text: String) {
 }
 
 @Composable
-fun VictoryStatus(state: GameUiState, playerName: String) {
+fun VictoryStatus(state: GameUiState, playerId: String) {
     Text(
-        text = gameStatusTitle(state, playerName),
+        text = gameStatusTitle(state, playerId),
         style = mainTypography.headlineLarge,
         color = textPrimary
     )
     VerticalSpacer(height = space8)
     Text(
-        text = gameStatusSubTitle(state, playerName),
+        text = gameStatusSubTitle(state, playerId),
         style = mainTypography.labelSmall,
         color = textPrimary
     )

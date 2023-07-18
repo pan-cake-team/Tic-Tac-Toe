@@ -27,7 +27,7 @@ class GameViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private val args: GameArgs = GameArgs(savedStateHandle)
-    val playerName = SharedPrefManager.playerName
+    val playerId = SharedPrefManager.playerId
 
     init {
 
@@ -62,9 +62,9 @@ class GameViewModel @Inject constructor(
 
     fun onClickGameBoard(index: Int) {
         val player = _state.value
-        if (player.playerOne.name == playerName && player.playerOne.isRoundPlayer) {
+        if (player.playerOne.id == playerId && player.playerOne.isRoundPlayer) {
             updateGameBoard(index)
-        } else if (player.playerTwo.name == playerName && player.playerTwo.isRoundPlayer) {
+        } else if (player.playerTwo.id == playerId && player.playerTwo.isRoundPlayer) {
             updateGameBoard(index)
         }
     }

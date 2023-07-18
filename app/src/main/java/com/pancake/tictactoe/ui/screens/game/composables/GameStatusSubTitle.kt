@@ -7,13 +7,13 @@ import com.pancake.tictactoe.ui.screens.game.GameStatus
 import com.pancake.tictactoe.ui.screens.game.GameUiState
 
 @Composable
-fun gameStatusSubTitle(state: GameUiState, playerName: String): String {
+fun gameStatusSubTitle(state: GameUiState, playerId: String): String {
     return when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) stringResource(R.string.win_message) else stringResource(
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.id == playerId) stringResource(R.string.win_message) else stringResource(
             R.string.lose_message
         )
 
-        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) stringResource(R.string.win_message) else stringResource(
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.id == playerId) stringResource(R.string.win_message) else stringResource(
             R.string.lose_message
         )
 

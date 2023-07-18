@@ -34,7 +34,7 @@ import com.pancake.tictactoe.ui.theme.textSize16
 
 
 @Composable
-fun ResultDialog(state: GameUiState, playerName: String, onDismiss: () -> Unit) {
+fun ResultDialog(state: GameUiState, playerId: String, onDismiss: () -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
         Box(
             Modifier
@@ -48,24 +48,24 @@ fun ResultDialog(state: GameUiState, playerName: String, onDismiss: () -> Unit) 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = getDialogTitle(state, playerName),
+                    text = getDialogTitle(state, playerId),
                     fontSize = textSize16,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = FontFamily(Font(R.font.noto_serif)),
-                    color = getDialogColor(state, playerName),
+                    color = getDialogColor(state, playerId),
                     textAlign = TextAlign.Center
                 )
                 VerticalSpacer(height = space24)
                 Image(
                     modifier = Modifier.size(150.dp),
-                    painter = painterResource(getDialogImage(state, playerName)),
+                    painter = painterResource(getDialogImage(state, playerId)),
                     contentDescription = ""
                 )
                 VerticalSpacer(height = space16)
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(space24),
-                    colors = ButtonDefaults.buttonColors(getDialogColor(state, playerName)),
+                    colors = ButtonDefaults.buttonColors(getDialogColor(state, playerId)),
                     onClick = onDismiss,
                 ) {
                     Text(
@@ -80,22 +80,22 @@ fun ResultDialog(state: GameUiState, playerName: String, onDismiss: () -> Unit) 
     }
 }
 
-fun getDialogTitle(state: GameUiState, playerName: String): String {
+fun getDialogTitle(state: GameUiState, playerId: String): String {
     return when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) "Congrats ${state.playerOne.name} Win" else "Sorry you lose"
-        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) "Congrats ${state.playerTwo.name} Win" else "Sorry you lose"
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.id == playerId) "Congrats ${state.playerOne.name} Win" else "Sorry you lose"
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.id == playerId) "Congrats ${state.playerTwo.name} Win" else "Sorry you lose"
         GameStatus.DRAW -> "Victory Draw"
         else -> ""
     }
 }
 
-fun getDialogColor(state: GameUiState, playerName: String): Color {
+fun getDialogColor(state: GameUiState, playerId: String): Color {
     return when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) Color(0xFFFFE437) else Color(
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.id == playerId) Color(0xFFFFE437) else Color(
             0xFFFF3434
         )
 
-        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) Color(0xFFFFE437) else Color(
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.id == playerId) Color(0xFFFFE437) else Color(
             0xFFFF3434
         )
 
@@ -104,12 +104,12 @@ fun getDialogColor(state: GameUiState, playerName: String): Color {
     }
 }
 
-fun getDialogImage(state: GameUiState, playerName: String): Int {
+fun getDialogImage(state: GameUiState, playerId: String): Int {
     return when (state.gameStatus) {
-        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.name == playerName) R.drawable.image_winer else R.drawable.image_lose
+        GameStatus.PLAYER_ONE_WIN -> if (state.playerOne.id == playerId) R.drawable.image_winer else R.drawable.image_lose
 
 
-        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.name == playerName) R.drawable.image_winer else R.drawable.image_lose
+        GameStatus.PLAYER_TWO_WIN -> if (state.playerTwo.id == playerId) R.drawable.image_winer else R.drawable.image_lose
 
         GameStatus.DRAW -> R.drawable.image_draw
         else -> R.drawable.image_draw
