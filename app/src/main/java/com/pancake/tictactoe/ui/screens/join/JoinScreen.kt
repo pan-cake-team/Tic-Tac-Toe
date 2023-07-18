@@ -19,10 +19,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.pancake.tictactoe.R
-import com.pancake.tictactoe.ui.screens.game.composables.JoinGameDialog
+import com.pancake.tictactoe.ui.screens.join.composable.JoinGameDialog
 import com.pancake.tictactoe.ui.screens.game.navigateToGameScreen
-import com.pancake.tictactoe.ui.screens.join.composable.FullColorButton
-import com.pancake.tictactoe.ui.screens.join.composable.GameOutlineButton
+import com.pancake.tictactoe.ui.screens.join.composable.ButtonCreateGame
+import com.pancake.tictactoe.ui.screens.join.composable.CreateGameDialog
+import com.pancake.tictactoe.ui.screens.join.composable.ButtonJoinGame
 import com.pancake.tictactoe.ui.theme.TextTertiary
 import com.pancake.tictactoe.ui.theme.mainTypography
 import com.pancake.tictactoe.ui.theme.onPrimary
@@ -42,8 +43,10 @@ fun JoinScreen(
     JoinContent(
         state = state,
         onCreateGameClicked = viewModel::showCreateGameDialog,
+        onDismissCreateDialog = viewModel::hideCreateGameDialog,
+        onCreateSession = viewModel::createGameSession,
         onJoinGameClicked = viewModel::showJoinGameDialog,
-        onCreateSession = { name -> },
+        onDismissJoinDialog = viewModel::hideJoinGameDialog,
         onJoinToSession = viewModel::joinToGameSession,
         onChangeName = viewModel::onChangeName,
         onChangeGameId = viewModel::onChangeGameId,
@@ -60,8 +63,10 @@ fun JoinScreen(
 private fun JoinContent(
     state: JoinUiState,
     onCreateGameClicked: () -> Unit,
+    onDismissCreateDialog:()->Unit,
     onJoinGameClicked: () -> Unit,
-    onCreateSession: (name: String) -> Unit,
+    onDismissJoinDialog:()->Unit,
+    onCreateSession: () -> Unit,
     onJoinToSession: () -> Unit,
     onChangeName: (String) -> Unit,
     onChangeGameId: (String) -> Unit,
@@ -88,15 +93,15 @@ private fun JoinContent(
                 },
             verticalArrangement = Arrangement.spacedBy(space16)
         ) {
-            FullColorButton(
+            ButtonCreateGame(
                 title = stringResource(R.string.create_game),
-                onClick = { onCreateGameClicked() },
+                onClick = onCreateGameClicked,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            GameOutlineButton(
-                title = stringResource(R.string.create_game),
-                onClick = { onJoinGameClicked() },
+            ButtonJoinGame(
+                title = stringResource(R.string.join_game),
+                onClick = onJoinGameClicked,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -154,19 +159,25 @@ private fun JoinContent(
 
     if (state.isJoinGameDialogVisible)
         JoinGameDialog(
-            name = state.name,
-            gameId = state.gameId,
+            state = state,
             onChangeGameId = onChangeGameId,
             onChangeName = onChangeName,
             onClickDone = onJoinToSession,
-            setShowDialog = {
+            onDismiss = onDismissJoinDialog
+        )
 
-            })
+    if (state.isCreateGameDialogVisible)
+        CreateGameDialog(
+            state = state,
+            onChangeName = onChangeName,
+            onClickDone = onCreateSession,
+            onDismiss = onDismissCreateDialog
+        )
 
     LaunchedEffect(state.isJoinSuccess) {
         if (state.isJoinSuccess) {
             navToGameScreen(
-                state.name,
+                state.PlayerName,
                 state.gameId
             )
         }

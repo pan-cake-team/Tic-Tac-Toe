@@ -14,12 +14,6 @@ class JoinViewModel @Inject constructor(
 ) : BaseViewModel<JoinUiState>(JoinUiState()) {
 
 
-    init {
-        viewModelScope.launch {
-            firebaseFire.createSession("Ameer")
-        }
-    }
-
     fun showCreateGameDialog() {
         _state.update { state ->
             state.copy(isCreateGameDialogVisible = true)
@@ -32,7 +26,7 @@ class JoinViewModel @Inject constructor(
         }
     }
 
-    fun showJoinGameDialog(){
+    fun showJoinGameDialog() {
         _state.update { state ->
             state.copy(isJoinGameDialogVisible = true)
         }
@@ -46,7 +40,7 @@ class JoinViewModel @Inject constructor(
 
     fun onChangeName(name: String) {
         _state.update { state ->
-            state.copy(name = name)
+            state.copy(PlayerName = name)
         }
     }
 
@@ -57,7 +51,12 @@ class JoinViewModel @Inject constructor(
     }
 
     fun createGameSession() {
-        //todo: call createGameSession firebase function
+        _state.update { state ->
+            state.copy(isCreateGameDialogVisible = false)
+        }
+        viewModelScope.launch {
+            firebaseFire.createSession(state.value.PlayerName)
+        }
     }
 
     fun joinToGameSession() {
@@ -67,7 +66,7 @@ class JoinViewModel @Inject constructor(
         viewModelScope.launch {
             val isJoinSuccess = firebaseFire.joinSession(
                 state.value.gameId,
-                state.value.name
+                state.value.PlayerName
             )
             _state.update {
                 it.copy(
