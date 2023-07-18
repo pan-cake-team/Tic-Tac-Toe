@@ -1,4 +1,4 @@
-package com.pancake.tictactoe.ui.screens.game.composables
+package com.pancake.tictactoe.ui.screens.join.composable
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -26,22 +26,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pancake.tictactoe.R
+import com.pancake.tictactoe.ui.screens.game.composables.SpacerVertical16
+import com.pancake.tictactoe.ui.screens.game.composables.SpacerVertical24
+import com.pancake.tictactoe.ui.screens.join.JoinUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JoinGameDialog(
-    name: String,
-    gameId: String,
-    setShowDialog: (Boolean) -> Unit,
+    state:JoinUiState,
+    onDismiss: () -> Unit,
     onChangeName: (String) -> Unit,
     onChangeGameId: (String) -> Unit,
     onClickDone: () -> Unit,
-
     ) {
 
-
-    Dialog(onDismissRequest = { setShowDialog(false) }) {
+    Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = Color.White
@@ -74,8 +74,8 @@ fun JoinGameDialog(
                         ),
 
                         placeholder = { Text(text = stringResource(id = R.string.name)) },
-                        value = name,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        value = state.PlayerName,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = onChangeName,
                     )
 
@@ -105,8 +105,8 @@ fun JoinGameDialog(
                         ),
 
                         placeholder = { Text(text = stringResource(id = R.string.game_id)) },
-                        value = gameId,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        value = state.gameId,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = onChangeGameId
                     )
                     SpacerVertical24()
