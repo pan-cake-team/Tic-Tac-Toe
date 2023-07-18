@@ -1,23 +1,78 @@
 package com.pancake.tictactoe.ui.screens.game
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.pancake.tictactoe.data.localStorage.SharedPrefManager
+import com.pancake.tictactoe.domain.model.Game
+import com.pancake.tictactoe.domain.usecase.PushUpdateGameUseCase
+import com.pancake.tictactoe.domain.usecase.UpdateGameUseCase
+import com.pancake.tictactoe.ui.screens.game.mapper.toGame
+import com.pancake.tictactoe.ui.screens.game.mapper.toItemBoarderUiState
+import com.pancake.tictactoe.ui.screens.game.mapper.toPlayerUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor() : ViewModel() {
+class GameViewModel @Inject constructor(
+    private val gameUseCase: UpdateGameUseCase,
+    private val pushUpdateGame: PushUpdateGameUseCase,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
     private val _state = MutableStateFlow(GameUiState())
     val state = _state.asStateFlow()
 
+    private val args: GameArgs = GameArgs(savedStateHandle)
+    val playerId = SharedPrefManager.playerId
+
+    init {
+
+        getGameData()
+    }
+
+    private fun getGameData() {
+        viewModelScope.launch {
+            gameUseCase(args.gameId!!).collect { data ->
+
+                onGetDataSuccess(data)
+            }
+
+
+        }
+    }
+
+    private fun onGetDataSuccess(data: Game) {
+        _state.update { state ->
+            state.copy(
+                sessionId = data.sessionId,
+                idOwnerGame = data.idOwnerGame,
+                counter = data.counter,
+                gameStatus = data.gameStatus,
+                dialogState = data.dialogState,
+                playerOne = data.playerOne.toPlayerUiState(),
+                playerTwo = data.playerTwo.toPlayerUiState(),
+                boarder = data.boarder.map { it.toItemBoarderUiState() }
+            )
+        }
+    }
 
     fun onClickGameBoard(index: Int) {
+        val player = _state.value
+        if (player.playerOne.id == playerId && player.playerOne.isRoundPlayer) {
+            updateGameBoard(index)
+        } else if (player.playerTwo.id == playerId && player.playerTwo.isRoundPlayer) {
+            updateGameBoard(index)
+        }
+    }
+
+    private fun updateGameBoard(index: Int) {
         val updatedBoardState = _state.value.boarder.toMutableList().apply {
             this[index] = this[index].copy(
                 state = getUserAction(),
-                isActive = false,
             )
         }
 
@@ -33,6 +88,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
 
         updateScore(gameStatus)
         updateRoundPlayer()
+        updateGameData()
     }
 
     private fun updateRoundPlayer() {
@@ -81,7 +137,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         when (gameStatus) {
             GameStatus.PLAYER_ONE_WIN -> _state.update {
                 it.copy(
-                    isFinished = true,
                     playerOne = _state.value.playerOne.copy(
                         score = _state.value.playerOne.score + 1,
                     ),
@@ -90,15 +145,10 @@ class GameViewModel @Inject constructor() : ViewModel() {
 
             GameStatus.PLAYER_TWO_WIN -> _state.update {
                 it.copy(
-                    isFinished = true,
                     playerTwo = _state.value.playerTwo.copy(
                         score = _state.value.playerTwo.score + 1,
                     ),
                 )
-            }
-
-            GameStatus.DRAW -> {
-                _state.update { it.copy(isFinished = true) }
             }
 
             else -> {}
@@ -110,7 +160,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         return if (player.playerOne.isRoundPlayer) {
             when (checkIfWin(player.playerOne.action)) {
                 true -> {
-                    preventUserCompleteGame()
                     GameStatus.PLAYER_ONE_WIN
                 }
 
@@ -119,7 +168,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         } else {
             when (checkIfWin(player.playerTwo.action)) {
                 true -> {
-                    preventUserCompleteGame()
                     GameStatus.PLAYER_TWO_WIN
                 }
 
@@ -153,16 +201,6 @@ class GameViewModel @Inject constructor() : ViewModel() {
         return false
     }
 
-    private fun preventUserCompleteGame() {
-        _state.value.boarder.toMutableList().apply {
-            val items = this
-            for (i in items.indices) {
-                items[i] = items[i].copy(isActive = false)
-            }
-            _state.update { it.copy(boarder = items) }
-        }
-    }
-
     fun onClickPlayAgain() {
         val itemsBoard = mutableListOf<ItemBoarderUiSate>()
         for (i in 0..8) {
@@ -174,12 +212,19 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 counter = 0,
                 gameStatus = GameStatus.NOT_FINISH,
                 dialogState = true,
-                isFinished = false
             )
         }
+        updateGameData()
     }
 
     fun onClickDismissDialog() {
         _state.update { it.copy(dialogState = false) }
     }
+
+    private fun updateGameData() {
+        viewModelScope.launch {
+            pushUpdateGame(_state.value.toGame())
+        }
+    }
+
 }

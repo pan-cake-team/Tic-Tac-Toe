@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
+import com.pancake.tictactoe.data.localStorage.SharedPrefManager
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,14 +17,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        SharedPrefManager.getInit(applicationContext)
         setContent {
             TicTacTocApp()
 
             LaunchedEffect(Unit) {
-                with(firebaseFireStoreService){
-                    val sessionId = createSession("androw")
-                    joinSession(sessionId, "mostafa")
+                with(firebaseFireStoreService) {
+//                    val sessionId = createSession("Ameer")
+//                    getGameDocumentReference("165dccc522ae")
+//                    joinSession(sessionId, "mostafa")
                 }
             }
         }

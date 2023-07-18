@@ -1,18 +1,18 @@
 package com.pancake.tictactoe.data.remote
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
+import com.pancake.tictactoe.data.localStorage.SharedPrefManager
 import com.pancake.tictactoe.data.remote.FirebaseFireStoreService.Companion.generateRandomId
-import com.pancake.tictactoe.data.remote.models.Player
-import com.pancake.tictactoe.data.remote.models.Session
 import com.pancake.tictactoe.data.remote.exceptions.SessionCreationException
 import com.pancake.tictactoe.data.remote.exceptions.SessionJoiningException
-import com.pancake.tictactoe.data.remote.exceptions.SessionRetrievingException
+import com.pancake.tictactoe.data.remote.response.GameDto
+import com.pancake.tictactoe.data.remote.response.PlayerDto
+import com.pancake.tictactoe.data.remote.utill.toMap
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlin.jvm.Throws
 
 class FirebaseFireStoreServiceImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
@@ -21,13 +21,16 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
 
     @Throws(SessionCreationException::class)
     override suspend fun createSession(playerName: String): String {
+        val randomId = generateRandomId()
+        SharedPrefManager.playerId = randomId
         return suspendCoroutine { continuation ->
             val sessionId = generateRandomId()
             val sessionRef = collection.document(sessionId)
-            val player = Player(name = playerName)
-            val session = Session(
-                id = sessionId,
-                players = mutableListOf(player)
+
+            val session = setDefaultGameValue(
+                sessionId = sessionId,
+                idPlayerOne = randomId,
+                namePlayer = playerName
             )
             sessionRef
                 .set(session)
@@ -41,32 +44,41 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         }
     }
 
-    @Throws(SessionRetrievingException::class)
-    override suspend fun getSession(id: String): Session {
-        return suspendCoroutine { continuation ->
-            val sessionRef = collection.document(id)
-            sessionRef.get().addOnSuccessListener { document ->
-                runCatching { continuation.resume(document.toObject()!!) }
-                    .onFailure { exception ->
-                        val errorMessage = exception.message ?: SESSION_NOT_FOUND
-                        continuation.resumeWithException(SessionRetrievingException(message = errorMessage))
-                    }
-            }
-                .addOnFailureListener { exception ->
-                    val errorMessage = exception.message ?: SESSION_RETRIEVING_FAILED
-                    continuation.resumeWithException(SessionRetrievingException(message = errorMessage))
-                }
-        }
+    private fun setDefaultGameValue(
+        sessionId: String,
+        idPlayerOne: String,
+        namePlayer: String,
+    ): GameDto {
+        return GameDto(
+            sessionId = sessionId,
+            idOwnerGame = idPlayerOne,
+            playerOne = PlayerDto(
+                id = idPlayerOne,
+                name = namePlayer,
+                roundPlayer = true,
+                action = CROSS
+            ),
+            playerTwo = null,
+            boarder = (0..8).associate { it.toString() to EMPTY }
+        )
     }
 
     @Throws(SessionJoiningException::class)
-    override suspend fun joinSession(id: String, playerName: String): Boolean {
-        val session = getSession(id = id)
-        val player = Player(name = playerName)
+    override suspend fun joinSession(sessionId: String, playerName: String): Boolean {
+        val randomId = generateRandomId()
+        SharedPrefManager.playerId = randomId
+
+        val player = PlayerDto(
+            id = randomId,
+            name = playerName,
+            action = CIRCLE,
+            roundPlayer = false,
+        ).toMap()
+
+
         return suspendCoroutine { continuation ->
-            val sessionRef = collection.document(id)
-            session.players.add(player)
-            sessionRef.update(JOIN_PLAYER_PATH, session.players)
+            val sessionRef = collection.document(sessionId)
+            sessionRef.update(PLAYER_TOW, player)
                 .addOnSuccessListener {
                     continuation.resume(true)
                 }
@@ -77,6 +89,15 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getGameDocumentReference(sessionId: String): DocumentReference {
+        return collection.document(sessionId)
+    }
+
+    override suspend fun updateGame(game: GameDto) {
+        collection.document(game.sessionId!!).update(game.toMap())
+    }
+
+
     private companion object {
         const val ROOT_COLLECTION_PATH = "Session"
         const val JOIN_PLAYER_PATH = "players"
@@ -84,5 +105,9 @@ class FirebaseFireStoreServiceImpl @Inject constructor(
         const val SESSION_JOINING_FAILED = "Session Joining failed!"
         const val SESSION_CREATION_FAILED = "Session creation failed!"
         const val SESSION_RETRIEVING_FAILED = "Session retrieving failed!"
+        const val PLAYER_TOW = "playerTwo"
+        const val CIRCLE = "CIRCLE"
+        const val CROSS = "CROSS"
+        const val EMPTY = "EMPTY"
     }
 }

@@ -2,6 +2,7 @@ package com.pancake.tictactoe.ui.screens.game
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,14 +19,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pancake.tictactoe.R
+import androidx.navigation.NavController
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
 import com.pancake.tictactoe.ui.screens.game.composables.PlayerInfo
 import com.pancake.tictactoe.ui.screens.game.composables.ResultDialog
 import com.pancake.tictactoe.ui.screens.game.composables.VerticalSpacer
+import com.pancake.tictactoe.ui.screens.game.composables.gameStatusSubTitle
+import com.pancake.tictactoe.ui.screens.game.composables.gameStatusTitle
 import com.pancake.tictactoe.ui.theme.Brand
 import com.pancake.tictactoe.ui.theme.backGround
 import com.pancake.tictactoe.ui.theme.border1
@@ -38,23 +40,28 @@ import com.pancake.tictactoe.ui.theme.textPrimary
 
 @Composable
 fun GameScreen(
+    navController: NavController,
     viewModel: GameViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     GameContent(
         state = state,
+        playerId = viewModel.playerId!!,
         onClickGameBoard = viewModel::onClickGameBoard,
         onDismissDialog = viewModel::onClickDismissDialog,
-        onClickPlayAgain = viewModel::onClickPlayAgain
+        onClickPlayAgain = viewModel::onClickPlayAgain,
+        onClickBack = {}
     )
 }
 
 @Composable
 private fun GameContent(
     state: GameUiState,
+    playerId: String,
     onClickGameBoard: (Int) -> Unit,
     onDismissDialog: () -> Unit,
-    onClickPlayAgain: () -> Unit
+    onClickPlayAgain: () -> Unit,
+    onClickBack: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -63,12 +70,12 @@ private fun GameContent(
             .padding(start = space16, end = space16, top = space16, bottom = space24),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopBar()
+        TopBar(onClick = onClickBack)
         Spacer(modifier = Modifier.weight(1f))
-        if (state.isFinished) {
+        if (state.isGameFinished()) {
             if (state.dialogState)
-                ResultDialog(state, onDismiss = onDismissDialog)
-            VictoryStatus(isWin = true)
+                ResultDialog(state, playerId, onDismiss = onDismissDialog)
+            VictoryStatus(state, playerId)
             Spacer(modifier = Modifier.weight(1f))
         }
         PlayerInfo(state)
@@ -76,18 +83,19 @@ private fun GameContent(
         VerticalSpacer(height = space16)
         IdText(id = state.sessionId)
         Spacer(modifier = Modifier.weight(1f))
-        if (state.isFinished) {
+        if (state.isGameFinished()) {
             PlayButton(onClick = onClickPlayAgain)
         }
     }
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(onClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         Icon(
+            modifier = Modifier.clickable(onClick = onClick),
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "back",
             tint = Brand
@@ -113,15 +121,15 @@ fun ScoreText(text: String) {
 }
 
 @Composable
-fun VictoryStatus(isWin: Boolean) {
+fun VictoryStatus(state: GameUiState, playerId: String) {
     Text(
-        text = if (isWin) stringResource(R.string.you_win) else stringResource(R.string.you_lose),
+        text = gameStatusTitle(state, playerId),
         style = mainTypography.headlineLarge,
         color = textPrimary
     )
     VerticalSpacer(height = space8)
     Text(
-        text = if (isWin) stringResource(R.string.win_message) else stringResource(R.string.lose_message),
+        text = gameStatusSubTitle(state, playerId),
         style = mainTypography.labelSmall,
         color = textPrimary
     )

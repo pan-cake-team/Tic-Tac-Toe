@@ -1,6 +1,7 @@
 package com.pancake.tictactoe.di
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +16,11 @@ class NetworkModule {
     @Provides
     fun provideFireStoreInstance(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGson(): Gson {
+        return Gson()
     }
 }
