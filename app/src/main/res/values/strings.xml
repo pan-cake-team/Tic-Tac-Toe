@@ -12,7 +12,7 @@
     <string name="win_message">Congratulation</string>
     <string name="lose_message">Good luck next time</string>
     <string name="draw_message">Do your best next time </string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
 
     <string name="enter_your_name">Enter your name</string>
     <string name="name">Name</string>
@@ -21,5 +21,6 @@
     <string name="game_id">Game ID</string>
 
     <string name="join_game">Join Game</string>
+    <string name="copy_icon">Copy Icon</string>
 
 </resources>
