@@ -18,9 +18,9 @@ fun GameDto.toGame(): Game {
    return Game(
        sessionId = sessionId ?: "",
        idOwnerGame = idOwnerGame ?: "",
-       counter = counter ?: 0,
-       gameStatus = GameStatus.toGameStatus(gameStatus ?: "NOT_FINISH")!!,
-       dialogState = dialogState ?: true,
+       counter = counter,
+       gameStatus = GameStatus.toGameStatus(gameStatus)!!,
+       dialogState = dialogState,
        playerOne = playerOne?.toPlayer() ?: player,
        playerTwo = playerTwo?.toPlayer() ?: player,
        boarder = boarder?.toItemBoardCell() ?: emptyList()

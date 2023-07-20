@@ -51,31 +51,39 @@ class HomeViewModel @Inject constructor(
     }
 
     fun createGameSession() {
-        _state.update { state ->
-            state.copy(isCreateGameDialogVisible = false)
-        }
-        viewModelScope.launch {
-            val gameId = firebaseFire.createSession(state.value.playerName)
-            if (gameId != SESSION_CREATION_FAILED) {
-                _state.update { it.copy(isCreateSuccess = true, gameId =gameId ) }
+        if (state.value.playerName.isNotEmpty()) {
+            _state.update { state ->
+                state.copy(isCreateGameDialogVisible = false)
             }
+            viewModelScope.launch {
+                val gameId = firebaseFire.createSession(state.value.playerName)
+                if (gameId != SESSION_CREATION_FAILED) {
+                    _state.update { it.copy(isCreateSuccess = true, gameId = gameId) }
+                }
+            }
+        } else {
+            _state.update { it.copy(isNameEmpty = true) }
         }
     }
 
     fun joinToGameSession() {
-        _state.update { state ->
-            state.copy(isJoinGameDialogVisible = false)
-        }
-        viewModelScope.launch {
-            val isJoinSuccess = firebaseFire.joinSession(
-                state.value.gameId,
-                state.value.playerName
-            )
-            _state.update {
-                it.copy(
-                    isJoinSuccess = isJoinSuccess
-                )
+        if (state.value.gameId.isNotEmpty() && state.value.playerName.isNotEmpty()) {
+            _state.update { state ->
+                state.copy(isJoinGameDialogVisible = false)
             }
+            viewModelScope.launch {
+                val isJoinSuccess = firebaseFire.joinSession(
+                    state.value.gameId,
+                    state.value.playerName
+                )
+                _state.update {
+                    it.copy(
+                        isJoinSuccess = isJoinSuccess
+                    )
+                }
+            }
+        } else {
+            _state.update { it.copy(isGameIdEmpty = true, isNameEmpty = true) }
         }
 
     }
