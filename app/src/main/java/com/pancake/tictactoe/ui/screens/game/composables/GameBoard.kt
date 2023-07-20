@@ -49,7 +49,7 @@ fun GameBoard(
                 itemBoardState,
                 isGameFinished = state.isGameFinished(),
                 background = background,
-                onClick = { onClick(index) },
+                onClick = { if (state.playerTwo.id != "") onClick(index) },
             )
         }
     }
