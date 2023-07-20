@@ -1,8 +1,13 @@
 package com.pancake.tictactoe.ui.screens.game
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +24,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.pancake.tictactoe.R
 import com.pancake.tictactoe.ui.screens.game.composables.GameBoard
 import com.pancake.tictactoe.ui.screens.game.composables.PlayButton
 import com.pancake.tictactoe.ui.screens.game.composables.PlayerInfo
@@ -44,13 +56,19 @@ fun GameScreen(
     viewModel: GameViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
     GameContent(
         state = state,
         playerId = viewModel.playerId!!,
         onClickGameBoard = viewModel::onClickGameBoard,
         onDismissDialog = viewModel::onClickDismissDialog,
         onClickPlayAgain = viewModel::onClickPlayAgain,
-        onClickBack = {}
+        onClickBack = { navController.popBackStack() },
+        onClickCopyGameId = {
+            clipboardManager.setText(AnnotatedString(state.sessionId))
+            showToastMessage(context)
+        }
     )
 }
 
@@ -61,6 +79,7 @@ private fun GameContent(
     onClickGameBoard: (Int) -> Unit,
     onDismissDialog: () -> Unit,
     onClickPlayAgain: () -> Unit,
+    onClickCopyGameId: () -> Unit,
     onClickBack: () -> Unit
 ) {
     Column(
@@ -81,7 +100,7 @@ private fun GameContent(
         PlayerInfo(state)
         GameBoard(state, onClick = onClickGameBoard)
         VerticalSpacer(height = space16)
-        IdText(id = state.sessionId)
+        GameId(id = state.sessionId, onClick = onClickCopyGameId)
         Spacer(modifier = Modifier.weight(1f))
         if (state.isGameFinished()) {
             PlayButton(onClick = onClickPlayAgain)
@@ -136,11 +155,26 @@ fun VictoryStatus(state: GameUiState, playerId: String) {
 }
 
 @Composable
-fun IdText(id: String) {
-    Text(
-        text = "ID: $id",
-        style = mainTypography.labelSmall,
-        color = textPrimary
-    )
+fun GameId(id: String, onClick: () -> Unit) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(space8)
+    ) {
+        Text(
+            text = "ID: $id",
+            style = mainTypography.labelSmall,
+            color = textPrimary
+        )
+        Image(
+            modifier = Modifier.clickable(onClick = onClick),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_copy),
+            contentDescription = stringResource(R.string.copy_icon),
+        )
+    }
+}
+
+fun showToastMessage(context: Context) {
+    Toast.makeText(context, "gameId Copied", Toast.LENGTH_SHORT).show()
 }
 
